@@ -6,30 +6,65 @@ No se pretende que este apartado se convierta en un capítulo de un libro dedica
 
 \section{Stream Processing Framework}
 
+Stream processing es una tecnología que procesa los datos de forma continua y secuencial, para realizar esta tarea se utilizan flujos de datos infinitos y sin límites de tiempo. Son extremadamente útiles a la hora de monitorizar sistemas, redes, aplicaciones, dispositivos, etc... 
+
+algunas de las alternativas más populares que he considerado son las siguientes:
+
+
 \subsection{Apache Kafka}
 
-Apache Kafka es un sistema de intermediación de mensajes que respone al patrón "Publish/Subscribe Messaging" que se utiliza para la comunicación entre aplicaciones. Entre sus principales características se encuentran que es un sistema escalable y persistente, con gran tolerancia a fallos y gran velocidad tanto de escritura cómo de lectura.
+Apache Kafka es un sistema de intermediación de mensajes que responde al patrón "Publish/Subscribe Messaging" que se utiliza para la comunicación entre aplicaciones. Entre sus principales características se encuentran que es un sistema escalable y persistente, con gran tolerancia a fallos y gran velocidad tanto de escritura cómo de lectura.
 
 Para transmitir estos datos Kafka crea Topics, flujos de datos que a su vez se dividen en particiones, cada mensaje se almacena en una de estas particiones.
 
-\subsection{APACHE SAMZA}
+\subsection{Apache Samza}
+Es un procesador de flujo a tiempo real, usa Apache Kafka para la mensajería y Apache Hadoop YARN para tolerancia a fallos, seguridad, independencia de procesos y gestión de recursos para su utilización es necesario Hadoop. Samza utiliza streams inmutables e implementa el procesamiento de flujo sin y con estado.  
 
+\subsection{Apache Flume}
 
-\subsection{APACHE FLUME}
-
-
-\subsection{Apache Spark}
-
+Apache Flume es un servicio distribuido capaz de mover grandes cantidades de datos y logs, este forma parte del ecosistema de Hadoop. Su arquitectura es tanto flexible cómo sencilla aunque presenta cierta dificultad a la hora de escalar. Esta basado en flujo de datos en Streaming permitiendo múltiples flujos. 
 
 \section{Visualización y análisis de datos}
 
+\subsection{PRTG Network Monitor}
+
+PRTG Network Monitor es una herramienta de monitorización de Paessler, nos permite supervisar y monitorizar datos de sensores,  la versión gratuita esta limitada a 100 sensores, una de las ventajas de PRTG es la cantidad de variedad de sensores que existen de forma predefinida. Nos permite mostrar alertas al encontrar problemas o métricas inusuales y estas nos pueden llegar de diversas formas.
+
+\subsection{ThingSpeak}
+
+ThinkSpeak es una plataforma open source orientada al internet de las cosas (IOT) que nos permite recoger, almacenar datos de sensores en la nube usando el protocolo HTTP y visualizar los datos. También nos permite realizar análisis de los datos usando MATLAB. 
+
+ThingSpeak consta de aplicaciones complementarias con diversas funcionalidades.
+
+\subsection{Grafana}
+
+Grafana nos permite visualizar y representar métricas de datos sin importar donde estén almacenados, la visualización es rápida y flexible con multitud de opciones. En Grafana se pueden definir alertas sobre las métricas que deseemos y mandarnos notificaciones de las mismas, también cuenta con cientos de plugins oficiales. 
+
+Contiene una opción de pago en la que ellos albergan ellos el servidor y otro completamente gratuita en la que nosotros podremos ejecutarlo en cualquiera de los sistemas operativos principales.
 
 \section{Motor de búsquedas}
 
 \subsection{Algolia}
-
+Algolia es un motor de búsqueda accesible vía API, la cual se puede integrar en web y aplicaciones móviles. Funciona exclusivamente con datos en formato JSON. Algolia posee una inteligencia artificial que aprende del usuario para mejorar su experiencia de uso. Consta de una versión gratuita, la cual tiene limitada el número de resultados de búsqueda.
 
 \subsection{ElectricSearch}
+EleactricSearch es uno de los motor de búsqueda mas valorados del mercado, de código abierto que proporciona análisis y búsqueda de datos a tiempo real. Esta desarrollado en Java y sólo soporta JSON cómo tipos de respuesta.
+
+Posee una arquitectura distribuida siendo la escalabilidad horizontal, una de sus ventajas es su rapidez a la hora de realizar búsquedas de textos complejos para facilitar esto funciona mediante índices invertidos.  
+
 
 
 \subsection{Solr}
+Apache Solr es un motor de búsqueda open source escrito en java con comandos escritos en HTTP y guarda los archivos utilizando XML. Esta optimizado para trafico de altos volúmenes de datos y todo en tiempo real. 
+
+\section{librerias}
+
+\subsection{Scikit-learn}
+
+Scikit-learn es un módulo de programación en python para machine learning, nos permite realizar algoritmos de clasificación, regresión, Análisis de grupos, Máquinas de vectores de soporte, Árboles de decisión, etc...
+
+Scikit-learn trabaja a su vez con otras librerías cómo NumPy, SciPy, pandas, SymPy, Matplotlib, Ip[y].
+
+\subsection{scikit-multiflow}
+
+Scikit-multiflow es una librería de machine learning para python dedicada a streaming data y multi-output learning que nos permite generar y evaluar data streams.
