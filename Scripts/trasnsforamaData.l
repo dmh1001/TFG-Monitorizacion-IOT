@@ -1,0 +1,59 @@
+%{
+ char idSensor[10];
+%}
+
+%s DATA
+%s PRTGMETADATA
+%s READING
+
+%%
+
+"["                         BEGIN(PRTGMETADATA);
+<PRTGMETADATA>"{"           {
+                                BEGIN(DATA);
+                                printf("{\"senosor_id:\"%s\",",idSensor);
+
+                            }
+
+<DATA>,                     {
+                             BEGIN(READING);
+                             printf(",\"reading:\"{");
+                            }
+
+<READING>%                  ;
+<READING>"}"                {
+                                BEGIN(PRTGMETADATAP);
+                                printf("}}");
+
+                            }
+<READING>.                  printf("%s",yytext);
+<PRTGMETADATA>"]"           BEGIN(INITIAL);
+
+<DATA>.                     printf("%s",yytext);
+<PRTGMETADATA>,             printf("\n");
+<PRTGMETADATA>.|\n          ;
+
+.|\n                        ;
+
+
+%%
+
+int main(int argc, char **argv){
+
+        if(argc = 2){
+                strcpy(idSensor, argv[2]);
+                FILE *file;
+                file = fopen(argv[1],"r");
+                if(!file){
+                        printf("No se puede leer el fichero");
+                        exit(1);
+                }
+                yyin = file;
+                yylex();
+
+        }else{
+                printf("numero de argumentos invalido");
+        }
+
+
+}
