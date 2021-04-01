@@ -1,3 +1,15 @@
+/*
+    procesador de lenguaje que adapta los datos de los sensores de PRTG para
+    poder ser introducidos en Elasticsearch
+
+    Autor: Daniel Mellado 
+    
+    Compilación:
+        flex trasnformaSensorData.l
+        gcc lex.yy.c -lfl
+*/
+
+
 %{
  char idSensor[10];
 %}
@@ -11,18 +23,20 @@
 "["                         BEGIN(PRTGMETADATA);
 <PRTGMETADATA>"{"           {
                                 BEGIN(DATA);
-                                printf("{\"senosor_id:\"%s\",",idSensor);
+                                printf("{\"senosor_id\":\"%s\",",idSensor);
+
 
                             }
 
 <DATA>,                     {
-                             BEGIN(READING);
-                             printf(",\"reading:\"{");
+                                BEGIN(READING);
+                                printf(",\"reading\":{");
+
                             }
 
 <READING>%                  ;
 <READING>"}"                {
-                                BEGIN(PRTGMETADATAP);
+                                BEGIN(PRTGMETADATA);
                                 printf("}}");
 
                             }
