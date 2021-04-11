@@ -23,7 +23,7 @@
 "["                         BEGIN(PRTGMETADATA);
 <PRTGMETADATA>"{"           {
                                 BEGIN(DATA);
-                                printf("{\"senosor_id\":\"%s\",",idSensor);
+                                printf("{\"sensorId\":\"%s\",",idSensor);
 
 
                             }
