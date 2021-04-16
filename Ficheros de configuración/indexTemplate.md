@@ -13,17 +13,9 @@ POST _template/sensor_data_template
       "sensorId": {
         "type": "integer"
       },
-      "sensorType": {
-        "type": "keyword",
-        "fields": {
-          "analyzed": {
-            "type": "text"
-          }
-        }
-      },
-      "datatime":{
+      "datetime":{
         "type": "date",
-        "format": "MM/dd/yy hh:mm:ss a"
+        "format": "dd/MM/yyyy HH:mm:ss"
       },
       "reading": {
         "type": "nested", 
