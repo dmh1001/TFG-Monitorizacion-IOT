@@ -49,6 +49,10 @@ Contiene una opción de pago en la que ellos albergan ellos el servidor y otro c
 Splunk es una plataforma que nos permite monitorizar, buscar y analizar nuestros datos en tiempo real, esta herramienta consta con cientos de aplicaciones y es compatible con casi cualquier formato de logs. Splunk es gratis con un volumen de datos diarios de menos de 500MB. \cite{pagina:Splunk}
 
 Uno de sus atractivos es que consta de una herramienta machine learning que aprende de tus datos detectando anomalías y prediciéndolas.
+
+
+Debido a que la empresa que nos iba a facilitar los datos de los sensores utiliza PRTG he optado por esta opción.
+
 \section{Motor de búsquedas}
 
 \subsection{Algolia}
@@ -58,10 +62,11 @@ Algolia es un motor de búsqueda accesible vía API, la cual se puede integrar e
 ElasticSearch es uno de los motor de búsqueda mas valorados del mercado\cite{ranking:DB-Engines} , de código abierto que proporciona análisis y búsqueda de datos a tiempo real. Esta desarrollado en Java y sólo soporta JSON cómo tipos de respuesta.
 
 Posee una arquitectura distribuida siendo la escalabilidad horizontal, una de sus ventajas es su rapidez a la hora de realizar búsquedas de textos complejos para facilitar esto funciona mediante índices invertidos.\cite{pagina:ElasticSearch}  
-
-
 \subsection{Solr}
 Apache Solr es un motor de búsqueda open source escrito en java con comandos escritos en HTTP y guarda los archivos utilizando XML. Esta optimizado para trafico de altos volúmenes de datos y todo en tiempo real.\cite{pagina:Solr} 
+
+Debido a que el entorno de ElasticSearch nos facilita la ingesta de datos, almacenamiento y la posterior visualización de los mismos se ha elegido esa opción.
+
 
 \section{librerias}
 
@@ -74,3 +79,46 @@ Scikit-learn trabaja a su vez con otras librerías cómo NumPy, SciPy, pandas, S
 \subsection{scikit-multiflow}
 
 Scikit-multiflow es una librería de machine learning para python dedicada a streaming data y multi-output learning que nos permite generar y evaluar data streams.\cite{pagina:scikit-mutliflow}
+
+
+\section{Control de versiones}
+
+Herramientas consideradas: GitHub y GitLab.
+
+Para organizar el proyecto he elegido la plataforma de control de versiones de GitHub debido a ser el software de versiones Git más utilizado y con el cual tengo más experiencia.
+
+
+\section{Sistemas Operativos}
+
+\subsection{Windows 10}
+Debido a que en la empresa que nos iba a facilitar los datos utilizan PRTG para monitorizar los sensores y este es exclusivo de Windows no tenía más alternativa que utilizar este sistema operativo para alvergar mi servidor PRTG.
+
+\subsection{Ubuntu Server 20.04.2}
+Para albergar tanto ElasticSearch como el he escogido la última versión de ubuntu server debido a que es muy ligera 
+\section{IDEs}
+
+\subsection{\LaTeX}
+
+Herramientas consideradas: Overleaf y Textmaker
+
+La herramienta que he decidido utilizar para redactar la memoria ha sido Overleaf divido a que es un editor \LaTeX basado en la nube y no requiere de ninguna instalación previa.
+
+\subsubsection{Vim}
+Para la edición de archivos de texto en el servidor de Ubuntu he decidido utilizar vim debido a su gran versatilidad y ligereza.
+
+\section{Virtualización}
+
+\subsubsection{VirtualBox}
+Para albergar las máquinas virtuales he utilizado VirtualBox debido a ser la herramienta open source más famosa de virtualización.
+
+\section{Procesadores de lenguaje}
+
+Herramientas consideradas: Flex, Bison, JavaCC
+
+Debido a la baja complejidad y el poco uso que le iba a dar a esta herramienta he decidido utilizar Flex, un analizador de lenguaje open source.
+
+
+\section{Comunicación}
+\subsection{Microsoft Teams}
+
+Microsoft Teams es una plataforma de comunicación y colaboración para reuniones telemáticas.

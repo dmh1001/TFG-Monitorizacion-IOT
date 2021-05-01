@@ -1,3 +1,4 @@
+
 \apendice{Documentación técnica de programación}
 
 \section{Introducción}
@@ -8,4 +9,123 @@
 
 \section{Compilación, instalación y ejecución del proyecto}
 
+instalar el paquete de herramientas de red de linux
+\begin{lstlisting}[frame=single] 
+
+apt install net-tools
+
+\end{lstlisting}
+
+comprobar la zona horaria
+
+si es necesario cambiarla
+dpkg-reconfigure tzdata
+
+\subsection{Instalación}
+
+
+\begin{lstlisting}[frame=single] 
+
+wget -qO - https://artifacts.elastic.co
+/GPG-KEY-elasticsearch | sudo apt-key add -
+
+\end{lstlisting}
+
+\begin{lstlisting}[frame=single] 
+
+echo "deb https://artifacts.elastic.co/packages/7.x
+/apt stable main" | sudo tee -a /etc/apt/
+sources.list.d/elastic-7.x.list
+
+apt update
+
+sudo apt-get install apt-transport-https
+
+sudo apt install elasticsearch
+
+sudo apt install kibana
+
+sudo apt install logstash
+
+sudo apt install openjdk-11-jre-headless
+
+apt update && apt upgrade
+ 
+ 
+ \end{lstlisting}
+ 
+ \subsection{Configuración}
+ 
+ \subsubsection{Elasticsearch}
+ el archivo de configuración se encuentra en: /etc/elasticsearch/elasticsearch.yml
+ 
+ nota: importante en el archivo de configuración no puede haber ningún espacio al inicio de las lineas.
+ Para ejecutar elasticsearch
+ 
+       
+combertir en servicio:
+\begin{lstlisting}[frame=single] 
+
+systemctl daemon-reload && systemctl enable elasticsearch.service
+\end{lstlisting}
+ 
+ para iniciar el servicio:
+ 
+\begin{lstlisting}[frame=single] 
+
+systemctl start elasticsearch
+\end{lstlisting}
+ 
+\subsubsection{kibana}
+
+El archivo de configuración se encuentra en: /etc/kibana/kibana.yml
+ 
+ Creamos la carpeta de logs
+ 
+\begin{lstlisting}[frame=single]  
+
+mkdir /var/log/kibana
+
+\end{lstlisting}
+
+cambiamos el propietario
+
+\begin{lstlisting}[frame=single]  
+
+chown -R kibana:kibana /var/log/kibana/
+
+\end{lstlisting}
+
+combertir en servicio:
+
+\begin{lstlisting}[frame=single]  
+
+systemctl daemon-reload && systemctl enable kibana
+\end{lstlisting}
+ 
+ para iniciar el servicio:
+ 
+\begin{lstlisting}[frame=single] 
+
+systemctl start kibana
+\end{lstlisting}
+
+\subsubsection{logstash}
+
+\begin{lstlisting}[frame=single] 
+
+systemctl daemon-reload && systemctl enable logstash
+systemctl start logstash
+systefilebeat setup -e
+
+\end{lstlisting}
+
+\subsubsection{slasticdump}
+
+\begin{lstlisting}[frame=single] 
+apt install npm
+npm install elasticdump -g
+\end{lstlisting}
+
 \section{Pruebas del sistema}
+
