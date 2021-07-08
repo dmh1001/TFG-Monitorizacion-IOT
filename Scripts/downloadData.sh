@@ -7,20 +7,21 @@
 #
 
 user="prtgadmin"
-passhash=1679108625  #2067765068
+passhash=1331387211
 sleepTime=60 #segundos
-path="/home/elk/DownloadSensorData"
-IP_PRTG="192.168.0.28:80"
+path="/home/elk/DownloadData"
+IP_PRTG="192.168.0.29:80"
 
 while true
 do
-
-        listIdSensores="1003 1006" # TODO: los ids se tendran que almacenar en otro sitio
+        listIdSensores="2051" # TODO: los ids se tendran que almacenar en otro sitio
 
         for idSensor in $listIdSensores
         do
                 sdate=$(date +"%Y-%m-%d-%H-%M-%S" -d '30 minutes ago')
+                sdateAlg=$(date +"%d/%m/%Y %H:%M:%S" -d '30 minutes ago')
                 edate=$(date +"%Y-%m-%d-%H-%M-%S")
+                edateAlg=$(date +"%d/%m/%Y %H:%M:%S")
 
                 if [ -f $path/tempData"$idSensor".json ]
                 then
@@ -41,6 +42,11 @@ do
                         rm $path/logs/historic"$idSensor".json
                 fi
 
+                #Prediccion
+
+                echo $sdateAlg > $path/a.txt
+                echo $edateAlg > $path/aa.txt
+                python3 $path/../Prediccion/prediccion.py "$sdateAlg" "$edateAlg"
         done
         sleep $sleepTime
 done
