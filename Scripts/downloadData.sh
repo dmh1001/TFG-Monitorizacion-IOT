@@ -3,7 +3,7 @@
 #
 # Versión 2
 #
-# se ejecuta cada 5 minutos (300 segundos) para un id de sensor concreto
+# se ejecuta cada  minutos (60 segundos) para un id de sensor concreto
 #
 
 user="prtgadmin"
@@ -11,6 +11,7 @@ passhash=1331387211
 sleepTime=60 #segundos
 path="/home/elk/DownloadData"
 IP_PRTG="192.168.0.29:80"
+firstRun=true
 
 while true
 do
@@ -19,9 +20,26 @@ do
         for idSensor in $listIdSensores
         do
                 sdate=$(date +"%Y-%m-%d-%H-%M-%S" -d '30 minutes ago')
-                sdateAlg=$(date +"%d/%m/%Y %H:%M:%S" -d '30 minutes ago')
                 edate=$(date +"%Y-%m-%d-%H-%M-%S")
-                edateAlg=$(date +"%d/%m/%Y %H:%M:%S")
+
+                echo 'inicio: ' $sdate >> $path/testDates.txt
+                echo 'fin:    ' $edate >> $path/testDates.txt
+
+                if [ $firstRun = true ]
+                then
+                        sdateAlg=$(date +"%d/%m/%Y %H:%M:%S" -d '30 minutes ago')
+                        edateAlg=$(date +"%d/%m/%Y %H:%M:%S")
+
+                        let firstRun=false
+                        echo 'INICIO: ' $sdateAlg >> $path/testDates.txt
+                        echo 'FIN:    ' $edateAlg >> $path/testDates.txt
+                else
+                        sdateAlg=$edateAlg
+                        edateAlg=$(date +"%d/%m/%Y %H:%M:%S")
+
+                        echo 'inicio: ' $sdateAlg >> $path/testDates.txt
+                        echo 'fin:    ' $edateAlg >> $path/testDates.txt
+                fi
 
                 if [ -f $path/tempData"$idSensor".json ]
                 then
@@ -35,18 +53,19 @@ do
                         rm $path/logs/historic"$idSensor".json
                 else
                         curl -o $path/logs/historic"$idSensor".json $IP_PRTG'/api/historicdata.json?id='$idSensor'&avg=0&usecaption=1&sdate='$sdate'&edate='$edate'&username='$user'&passhash='$passhash
-
-                        $path/transformaSensorData $path/logs/historic"$idSensor".json $idSensor > $path/tempData"$idSensor".json
+ $path/transformaSensorData $path/logs/historic"$idSensor".json $idSensor > $path/tempData"$idSensor".json
                         bash $path/load_sensor_data.sh $path/tempData"$idSensor".json
 
                         rm $path/logs/historic"$idSensor".json
                 fi
 
+                sleep 40
                 #Prediccion
-
-                echo $sdateAlg > $path/a.txt
-                echo $edateAlg > $path/aa.txt
                 python3 $path/../Prediccion/prediccion.py "$sdateAlg" "$edateAlg"
         done
-        sleep $sleepTime
+
+        a=$(($sleepTime - 40))
+
+        sleep $a
+
 done
