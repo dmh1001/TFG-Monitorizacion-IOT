@@ -61,7 +61,16 @@ do
 
                 sleep 40
                 #Prediccion
-                python3 $path/../Prediccion/prediccion.py "$sdateAlg" "$edateAlg"
+                if [ $firstRun = true ]
+                then
+                        python3 $path/../Prediccion/prediccion.py "$sdateAlg" "$edateAlg" 1
+
+                        let firstRun=false
+                else
+
+                        python3 $path/../Prediccion/prediccion.py "$sdateAlg" "$edateAlg" 0
+                fi
+
         done
 
         a=$(($sleepTime - 40))
