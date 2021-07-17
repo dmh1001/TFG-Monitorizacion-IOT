@@ -17,6 +17,10 @@ import types
 import sys
 
 import pickle
+from datetime import date
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
 
 def get_ordinal_date(x):
     return {'ordinal_date': x.toordinal()}
@@ -88,11 +92,47 @@ def initModel():
 
     return model
 
+def prediccion(model, nDias):
+
+    lista_preds = []
+    d = datetime.now()
+
+    for dia in range(0,nDias * 1440):
+
+        d = d + relativedelta(minutes=1)
+        #fecha = datetime.strptime(d,"%Y-%m-%d %H:%M:%S" )
+
+        with open('./home/elk/Prediccion/ssssssssssssss.json','a') as file:
+            file.write("fecha:" +  str(d) + "\n")
+
+        pred = model.predict_one(d)
+
+        #fecha = fecha.strftime("%d/%m/%Y %H:%M:%S")
+
+        with open('./home/elk/Prediccion/ssssssssssssss.json','a') as file:
+            file.write(str(pred) + "\n")
+
+        predLine = "{\"sensorId\":\"" + str(IdSensor) + "\",\"datetime\":\"" + d.strftime("%d/%m/%Y %H:%M:%S") + "\",\"reading\":{\"Prediction\":" + str(pred) + "}}"
+
+        lista_preds.append(predLine)
+
+        with open('./home/elk/Prediccion/pred.json','w') as file:
+            for pred in lista_preds:
+                file.write(pred + "\n")
+
+
+        os.system("bash /home/elk/DownloadData/load_sensor_data.sh /home/elk/Prediccion/pred.json")
+
+
+
+
+
 predLines = []
 dates =[]
 y_preds = []
 y_trues = []
 IdSensor = "2051"
+
 
 if( int(sys.argv[3]) == 1):
     model = initModel()
@@ -111,3 +151,18 @@ with open('./home/elk/Prediccion/dates.txt','a') as file:
 with open('./home/elk/Prediccion/predictData.json','w') as file:
     for pred in predLines:
         file.write(pred + "\n")
+
+os.system("bash /home/elk/DownloadData/load_sensor_data.sh /home/elk/Prediccion/predictData.json")
+
+with open('./home/elk/Prediccion/dates.txt','a') as file:
+    file.write("START PRED\n")
+
+prediccion(model, 1)
+
+with open('./home/elk/Prediccion/dates.txt','a') as file:
+    file.write("DONE PRED\n")
+
+with open('/home/elk/Prediccion/model.pickle',"wb") as file:
+    pickle.dump(model, file)
+
+
