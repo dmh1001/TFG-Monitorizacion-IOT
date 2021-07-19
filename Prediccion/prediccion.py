@@ -21,148 +21,146 @@ from datetime import date
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-
 def get_ordinal_date(x):
-    return {'ordinal_date': x.toordinal()}
+        return {'ordinal_date': x.toordinal()}
 
 def get_month_distances(x):
     return {
         calendar.month_name[month]: math.exp(-(x.month - month) ** 2)
         for month in range(1, 13)
     }
-def evaluate_model(model, fechaInicio, fechaFin):
-
-    metric = metrics.Rolling(metrics.MAE(), 12)
-
-    for date, value  in extractorData.extractData(IdSensor, fechaInicio, fechaFin):
-
-        # Obtain the prior prediction and update the model in one go
-        y_pred = model.predict_one(date)
-
-        with open('./home/elk/Prediccion/dates.txt','a') as file:
-            file.write(date.strftime("%d/%m/%Y %H:%M:%S") + " " + str(value) + ": " + str(y_pred)+"\n")
 
 
-        predLine = "{\"sensorId\":\"" + str(IdSensor) + "\",\"datetime\":\"" + date.strftime("%d/%m/%Y %H:%M:%S") + "\",\"reading\":{\"Prediction\":" + str(y_pred) + "}}"
+class Prediccion:
 
-        if( type(value) == type('')):
-            model.learn_one(date, 0)
+    def __init__(self, idSensor):
+        self.idSensor = idSensor
 
-            # Update the error metric
-            metric.update(0, y_pred)
+    def _generarLinea(self, date, y_pred):
+        return "{\"sensorId\":\"" + str(self.idSensor) + "\",\"datetime\":\"" + date.strftime("%d/%m/%Y %H:%M:%S") + "\",\"reading\":{\"Prediction\":" + str(y_pred) + "}}"
+    
+    def initModel(self):
 
+            model = compose.Pipeline(
+                ('features', compose.TransformerUnion(
+                    ('ordinal_date', compose.FuncTransformer(get_ordinal_date)),
+                    ('month_distances', compose.FuncTransformer(get_month_distances)),
+                )),
+                ('scale', preprocessing.StandardScaler()),
+                ('lin_reg', linear_model.LinearRegression(
+                    intercept_lr=0,
+                    optimizer=optim.SGD(0.03)
+                ))
+            )
+
+            extract_features = compose.TransformerUnion(get_ordinal_date, get_month_distances)
+
+            scale = preprocessing.StandardScaler()
+
+            learn = linear_model.LinearRegression(
+                intercept_lr=0,
+                optimizer=optim.SGD(0.03)
+            )
+
+            model = extract_features | scale | learn
+            model = time_series.Detrender(regressor=model, window_size=12)
+
+            return model
+
+    '''
+    Método que carga el modelo en un ficharo
+    '''
+    def cargarModelo(self):
+
+        try:
+            with open('/home/elk/Prediccion/model_'+ str(self.idSensor) +'.pickle', "rb") as file:
+                return pickle.load(file)
+        except FileNotFoundError as e:
+            print("Error")
+
+    '''
+    Método que guarda el modelo en un ficharo
+    '''
+    def guardarModelo(self, model):
+        with open('/home/elk/Prediccion/model_' + str(self.idSensor) + '.pickle',"wb") as file:
+            pickle.dump(model, file)
+
+    def evaluate_model(self, fechaInicio, fechaFin):
+        predLines = []
+        dates =[]
+        y_preds = []
+        y_trues = []
+
+        metric = metrics.Rolling(metrics.MAE(), 12)
+
+        if os.path.exists('/home/elk/Prediccion/model_'+ str(self.idSensor) +'.pickle'):
+            model = self.cargarModelo()
         else:
-            model.learn_one(date, value)
+            model = self.initModel()
 
-            # Update the error metric
-            metric.update(value, y_pred)
+        for date, value  in extractorData.extractData(self.idSensor, fechaInicio, fechaFin):
 
-        # Store the true value and the prediction
-        dates.append(date)
-        y_trues.append(value)
-        y_preds.append(y_pred)
+            # Obtain the prior prediction and update the model in one go
+            y_pred = model.predict_one(date)
 
-        predLines.append(predLine)
+            predLine = self._generarLinea(date, y_pred)
 
-def initModel():
+            if( type(value) == type('')):
+                model.learn_one(date, 0)
 
-    model = compose.Pipeline(
-        ('features', compose.TransformerUnion(
-            ('ordinal_date', compose.FuncTransformer(get_ordinal_date)),
-            ('month_distances', compose.FuncTransformer(get_month_distances)),
-        )),
-        ('scale', preprocessing.StandardScaler()),
-        ('lin_reg', linear_model.LinearRegression(
-            intercept_lr=0,
-            optimizer=optim.SGD(0.03)
-        ))
-    )
+                # Update the error metric
+                metric.update(0, y_pred)
 
-    extract_features = compose.TransformerUnion(get_ordinal_date, get_month_distances)
+            else:
+                model.learn_one(date, value)
 
-    scale = preprocessing.StandardScaler()
+                # Update the error metric
+                metric.update(value, y_pred)
 
-    learn = linear_model.LinearRegression(
-        intercept_lr=0,
-        optimizer=optim.SGD(0.03)
-    )
+            # Store the true value and the prediction
+            dates.append(date)
+            y_trues.append(value)
+            y_preds.append(y_pred)
 
-    model = extract_features | scale | learn
-    model = time_series.Detrender(regressor=model, window_size=12)
+            predLines.append(predLine)
 
-    return model
+            self._subirDatosPredichosElasticSearch(predLines, "prediccionData.json")
+            self.guardarModelo(model)
+    def prediccionSiguentesDias(self, model, nDias):
 
-def prediccion(model, nDias):
+            lista_preds = []
+            d = datetime.now()
 
-    lista_preds = []
-    d = datetime.now()
+            for dia in range(0,nDias * 1440):
 
-    for dia in range(0,nDias * 1440):
+                d = d + relativedelta(minutes=1)
 
-        d = d + relativedelta(minutes=1)
-        #fecha = datetime.strptime(d,"%Y-%m-%d %H:%M:%S" )
+                pred = model.predict_one(d)
 
-        with open('./home/elk/Prediccion/ssssssssssssss.json','a') as file:
-            file.write("fecha:" +  str(d) + "\n")
+                predLine = self._generarLinea(date, pred)
+                lista_preds.append(predLine)
 
-        pred = model.predict_one(d)
 
-        #fecha = fecha.strftime("%d/%m/%Y %H:%M:%S")
+                self._subirDatosPredichosElasticSearch(lista_preds, "pred.json")
 
-        with open('./home/elk/Prediccion/ssssssssssssss.json','a') as file:
-            file.write(str(pred) + "\n")
-
-        predLine = "{\"sensorId\":\"" + str(IdSensor) + "\",\"datetime\":\"" + d.strftime("%d/%m/%Y %H:%M:%S") + "\",\"reading\":{\"Prediction\":" + str(pred) + "}}"
-
-        lista_preds.append(predLine)
-
-        with open('./home/elk/Prediccion/pred.json','w') as file:
-            for pred in lista_preds:
+    '''
+    Método que sube los datos predichos a Elasticsearch.
+    '''
+    def _subirDatosPredichosElasticSearch(self, predLines, nombreFichero):
+        with open('/home/elk/Prediccion/' + str(nombreFichero) + '', "w") as file:
+            for pred in predLines:
                 file.write(pred + "\n")
 
-
-        os.system("bash /home/elk/DownloadData/load_sensor_data.sh /home/elk/Prediccion/pred.json")
-
+        os.system("bash /home/elk/DownloadData/load_sensor_data.sh /home/elk/Prediccion/" + str(nombreFichero) + "")
 
 
 
+if __name__ == "__main__":
 
-predLines = []
-dates =[]
-y_preds = []
-y_trues = []
-IdSensor = "2051"
+    p = Prediccion("2051")
+    p.evaluate_model(sys.argv[1], sys.argv[2])
 
 
-if( int(sys.argv[3]) == 1):
-    model = initModel()
-else:
-    with open('/home/elk/Prediccion/model.pickle', "rb") as file:
-        model = pickle.load(file)
-
-with open('./home/elk/Prediccion/dates.txt','a') as file:
-    file.write("STRART: "+ sys.argv[1] + " " + sys.argv[2] + "\n")
-
-evaluate_model(model, sys.argv[1], sys.argv[2])
-
-with open('./home/elk/Prediccion/dates.txt','a') as file:
-    file.write("DONE\n")
-
-with open('./home/elk/Prediccion/predictData.json','w') as file:
-    for pred in predLines:
-        file.write(pred + "\n")
-
-os.system("bash /home/elk/DownloadData/load_sensor_data.sh /home/elk/Prediccion/predictData.json")
-
-with open('./home/elk/Prediccion/dates.txt','a') as file:
-    file.write("START PRED\n")
-
-prediccion(model, 1)
-
-with open('./home/elk/Prediccion/dates.txt','a') as file:
-    file.write("DONE PRED\n")
-
-with open('/home/elk/Prediccion/model.pickle',"wb") as file:
-    pickle.dump(model, file)
+    #prediccion(model, 1)
 
 
