@@ -67,23 +67,27 @@ class Prediccion:
 
             return model
 
+
     '''
     Método que carga el modelo en un ficharo
     '''
     def cargarModelo(self):
 
         try:
-            with open('/home/elk/Prediccion/model_'+ str(self.idSensor) +'.pickle', "rb") as file:
+            with open('/home/elk/Prediccion/modelos/model_'+ str(self.idSensor) +'.pickle', "rb") as file:
                 return pickle.load(file)
         except FileNotFoundError as e:
-            print("Error")
+            print("Error, modelo no encontrado")
 
     '''
     Método que guarda el modelo en un ficharo
     '''
     def guardarModelo(self, model):
-        with open('/home/elk/Prediccion/model_' + str(self.idSensor) + '.pickle',"wb") as file:
+        with open('/home/elk/Prediccion/modelos/model_' + str(self.idSensor) + '.pickle',"wb") as file:
             pickle.dump(model, file)
+
+
+
 
     def evaluate_model(self, fechaInicio, fechaFin):
         predLines = []
@@ -93,7 +97,7 @@ class Prediccion:
 
         metric = metrics.Rolling(metrics.MAE(), 12)
 
-        if os.path.exists('/home/elk/Prediccion/model_'+ str(self.idSensor) +'.pickle'):
+        if os.path.exists('/home/elk/Prediccion/modelos/model_'+ str(self.idSensor) +'.pickle'):
             model = self.cargarModelo()
         else:
             model = self.initModel()
@@ -126,22 +130,32 @@ class Prediccion:
 
             self._subirDatosPredichosElasticSearch(predLines, "prediccionData.json")
             self.guardarModelo(model)
-    def prediccionSiguentesDias(self, model, nDias):
+            
+    def prediccionSiguentesDias(self, nDias):
 
-            lista_preds = []
-            d = datetime.now()
+        lista_preds = []
+        d = datetime.now()
 
-            for dia in range(0,nDias * 1440):
+        if os.path.exists('/home/elk/Prediccion/modelos/model_'+ str(self.idSensor) +'.pickle'):
+            model = self.cargarModelo()
+        else:
+            model = self.initModel()
 
-                d = d + relativedelta(minutes=1)
+        for dia in range(0, 10):
 
-                pred = model.predict_one(d)
+            d = d + relativedelta(minutes=1)
 
-                predLine = self._generarLinea(date, pred)
-                lista_preds.append(predLine)
+            pred = model.predict_one(d)
+
+            with open('/home/elk/Prediccion/fechasPredicciones', "a") as file:
+                file.write(str(d) +" || " + str(pred) + "\n")
+
+            predLine = self._generarLinea(d, pred)
+            lista_preds.append(predLine)
 
 
-                self._subirDatosPredichosElasticSearch(lista_preds, "pred.json")
+            self._subirDatosPredichosElasticSearch(lista_preds, "pred.json")
+
 
     '''
     Método que sube los datos predichos a Elasticsearch.
@@ -157,10 +171,8 @@ class Prediccion:
 
 if __name__ == "__main__":
 
-    p = Prediccion("2051")
+    p = Prediccion(sys.argv[3])
     p.evaluate_model(sys.argv[1], sys.argv[2])
 
-
-    #prediccion(model, 1)
 
 
