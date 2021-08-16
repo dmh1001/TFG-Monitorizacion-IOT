@@ -1,0 +1,5 @@
+#!/bin/bash
+
+rm /etc/kibana/kibana.yml
+rm /etc/elasticsearch/elasticsearch.yml
+

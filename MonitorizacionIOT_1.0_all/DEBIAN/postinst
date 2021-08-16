@@ -1,0 +1,20 @@
+#!/bin/bash
+
+
+echo -e "\e[36mIniciando procesos\e[0m"
+
+systemctl daemon-reload && systemctl enable elasticsearch.service
+
+echo -e "\e[36mInicializando elasticSearch\e[0m"
+systemctl start elasticsearch
+
+mkdir /var/log/kibana
+chown -R kibana:kibana /var/log/kibana/
+
+echo -e "\e[36mInicializando Kibana\e[0m"
+systemctl daemon-reload && systemctl enable kibana
+systemctl start kibana
+
+echo -e "\e[36mInicializando logstash\e[0m"
+systemctl daemon-reload && systemctl enable logstash
+systemctl start logstash
