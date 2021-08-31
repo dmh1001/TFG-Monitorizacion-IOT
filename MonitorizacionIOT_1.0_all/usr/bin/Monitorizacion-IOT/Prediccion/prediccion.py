@@ -25,18 +25,8 @@ from dateutil.relativedelta import relativedelta
 PATH="/usr/bin/Prediccion"
 
 def get_ordinal_date(x):
-    return {'ordinal_date': x.toordinal()}
-
-'''
-def get_month_distances(x):
-    return {
-        calendar.month_name[month]: math.exp(-(x.month - month) ** 2)
-        for month in range(1, 13)
-    }
-'''
-
-def get_hour(x):
-    return x.minute
+        return {'ordinal_date': x.hour * 60 + x.minute
+}
 
 class Prediccion:
 
@@ -48,34 +38,31 @@ class Prediccion:
 
     def inicializar_modelo(self):
 
-
-        model = compose.Pipeline(
-            ('features', compose.TransformerUnion(
-                ('ordinal_date', compose.FuncTransformer(get_ordinal_date))
-                #('hour', compose.FuncTransformer(get_hour))
-            )),
-            ('scale', preprocessing.StandardScaler()),
-            ('lin_reg', linear_model.LinearRegression(
-                intercept_lr=0,
-                optimizer=optim.SGD(0.001)
-            ))
+        extract_features = compose.TransformerUnion(
+            get_ordinal_date,
         )
 
-        extract_features = compose.TransformerUnion(get_ordinal_date)
-
-        scale = preprocessing.StandardScaler()
-
-        learn = linear_model.LinearRegression(
-            intercept_lr=0,
-            optimizer=optim.SGD(0.001)
+        model = (
+            extract_features |
+            time_series.SNARIMAX(
+                p=0,
+                d=0,
+                q=2,
+                m=30,
+                sp=6,
+                sq=10,
+                regressor=(
+                    preprocessing.StandardScaler() |
+                    linear_model.LinearRegression(
+                        intercept_init=12,
+                        optimizer=optim.SGD(0.01),
+                        intercept_lr=0.3
+                    )
+                )
+            )
         )
-
-        model = extract_features | scale | learn
-        model = time_series.Detrender(regressor=model, window_size=12)
-
 
         return model
-
 
     '''
     Método que carga el modelo en un ficharo
@@ -96,7 +83,7 @@ class Prediccion:
             pickle.dump(model, file)
 
 
-def entrenamiento_modelo(self, fecha_inicio, fecha_fin):
+    def entrenamiento_modelo(self, fecha_inicio, fecha_fin):
 
         predLines = []
         dates =[]
@@ -113,23 +100,17 @@ def entrenamiento_modelo(self, fecha_inicio, fecha_fin):
         for fecha, valor  in extractorData.extraer_data(self.idSensor, fecha_inicio, fecha_fin):
 
             # Obtain the prior prediction and update the model in one go
-            y_pred = modelo.predict_one(fecha)
-
-
-            predLine = self._generar_linea("Entrenamiento", fecha, y_pred)
-
+            y_pred = modelo.forecast(horizon=1, xs=[fecha])
+            predLine = self._generar_linea("Entrenamiento", fecha, y_pred[0])
 
             if( type(valor) == type('')):
-                modelo.learn_one(fecha, 0)
-
+                modelo.learn_one(date, 0)
                 # Update the error metric
-                metric.update(0, y_pred)
-
+                metric.update(0, y_pred[0])
             else:
                 modelo.learn_one(fecha, valor)
-
                 # Update the error metric
-                metric.update(valor, y_pred)
+                metric.update(valor, y_pred[0])
 
             # Store the true value and the prediction
             dates.append(fecha)
@@ -138,19 +119,20 @@ def entrenamiento_modelo(self, fecha_inicio, fecha_fin):
 
             predLines.append(predLine)
 
-
-        with open(PATH + '/entrenamientoData.json', "w") as file:
-            for pred in predLines:
-                file.write(pred + "\n")
+            with open(PATH + '/entrenamientoData.json', "w") as file:
+                for pred in predLines:
+                    file.write(pred + "\n")
 
         self.guardar_modelo(modelo)
 
-def prediccion(self, minutos):
+    def prediccion(self, minutos):
 
         lista_preds = []
+        horizonte = minutos
+        futuro = []
+        dates = []
 
-        fecha = datetime.now()
-        fecha = fecha.strftime('%Y-%m-%d  %H:%M:00')
+        fecha = datetime.now().strftime('%Y-%m-%d  %H:%M:00')
         fecha = datetime.strptime(fecha, '%Y-%m-%d  %H:%M:00')
 
         if os.path.exists(PATH + '/modelos/model_'+ str(self.idSensor) +'.pickle'):
@@ -158,23 +140,25 @@ def prediccion(self, minutos):
         else:
             modelo = self.inicializar_modelo()
 
-        for dia in range(0, minutos):
+        for dia in range(0, horizonte):
 
             fecha = fecha + relativedelta(minutes=1)
-            pred = modelo.predict_one(fecha)
+            futuro.append(fecha)
+            dates.append(fecha)
 
+        forecast = modelo.forecast(horizon=horizonte, xs=futuro)
 
-            predLine = self._generar_linea("Prediccion", fecha, pred)
+        for i in range(len(forecast)):
+            predLine = self._generar_linea("Prediccion", dates[i], forecast[i])
             lista_preds.append(predLine)
 
         with open(PATH + '/pred.json', "w") as file:
             for pred in lista_preds:
                 file.write(pred + "\n")
 
+
 if __name__ == "__main__":
 
     p = Prediccion(sys.argv[3])
     p.entrenamiento_modelo(sys.argv[1], sys.argv[2])
-
-
 
