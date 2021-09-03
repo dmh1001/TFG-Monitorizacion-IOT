@@ -46,6 +46,17 @@ class Modelo_SNARIMAX(Modelo):
         Modelo.__init__(self, idSensor)
         self.nombreModelo = PATH + '/modelos/modelSNARIMAX_' + str(idSensor) + '.pickle'
 
+        self.p = 0
+        self.d = 0
+        self.q = 2
+        self.m = 30
+        self.sp = 6
+        self.sq = 10
+
+        self.intercept_init = 12
+        self.sgd = 0.01
+        self.intercerpt_lr = 0.3
+
         if os.path.exists(self.nombreModelo):
             self.modelo = Persistencia_modelo.cargar(self.nombreModelo)
         else:
@@ -60,24 +71,25 @@ class Modelo_SNARIMAX(Modelo):
         model = (
             extract_features |
             time_series.SNARIMAX(
-                p=0,
-                d=0,
-                q=2,
-                m=30,
-                sp=6,
-                sq=10,
+                p=self.p,
+                d=self.d,
+                q=self.q,
+                m=self.m,
+                sp=self.sp,
+                sq=self.sq,
                 regressor=(
                     preprocessing.StandardScaler() |
                     linear_model.LinearRegression(
-                        intercept_init=12,
-                        optimizer=optim.SGD(0.01),
-                        intercept_lr=0.3
+                        intercept_init= self.intercept_init,
+                        optimizer=optim.SGD(self.sgd),
+                        intercept_lr= self.intercerpt_lr
                     )
                 )
             )
         )
 
         return model
+
     def entrenar(self, fecha_inicio, fecha_fin):
 
         predLines = []
@@ -85,19 +97,13 @@ class Modelo_SNARIMAX(Modelo):
 
         for fecha, valor  in Extractor.extraer_data(self.idSensor, fecha_inicio, fecha_fin, Campos.VALOR).items():
 
-
-            # Obtain the prior prediction and update the model in one go
             y_pred = self.modelo.forecast(horizon=1, xs=[fecha])
             predLine = Generador_lineas.generar_linea(self.idSensor, Campos.ENTRENAMIENTO, fecha, round(y_pred[0],2))
 
             if( type(valor) == type('')):
                 self.modelo.learn_one(fecha, 0)
-                # Update the error metric
             else:
                 self.modelo.learn_one(fecha, valor)
-                # Update the error metric
-
-            # Store the true value and the prediction
 
             dates.append(fecha)
 
@@ -106,7 +112,6 @@ class Modelo_SNARIMAX(Modelo):
         with open(PATH + '/entrenamientoData.json', "w") as file:
             for pred in predLines:
                 file.write(pred + "\n")
-
 
         Persistencia_modelo.guardar(self.modelo, self.nombreModelo)
             
@@ -135,4 +140,81 @@ class Modelo_SNARIMAX(Modelo):
             for pred in lista_preds:
                 file.write(pred + "\n")
 
-                                                                           
+class Modelo_Detrender(Modelo):
+
+    def __init__(self, idSensor):
+        Modelo.__init__(self, idSensor)
+        self.nombreModelo = PATH + '/modelos/modelDetrender_' + str(idSensor) + '.pickle'
+
+        self.Window = 12
+        self.intercept_lr = 0
+        self.sgd = 0.03
+
+        if os.path.exists(self.nombreModelo):
+            self.modelo = Persistencia_modelo.cargar(self.nombreModelo)
+        else:
+            self.modelo = self._inicializar()
+
+    def _inicializar(self):
+
+
+        extract_features = compose.TransformerUnion(Modelo._get_ordinal_date)
+
+        scale = preprocessing.StandardScaler()
+
+        learn = linear_model.LinearRegression(
+            intercept_lr=self.intercept_lr,
+            optimizer=optim.SGD(self.sgd)
+        )
+
+        model = extract_features | scale | learn
+
+        model = time_series.Detrender(regressor=model, window_size=self.window)
+
+
+        return model
+
+    def entrenar(self, fecha_inicio, fecha_fin):
+
+        predLines = []
+        dates =[]
+
+        for fecha, valor  in Extractor.extraer_data(self.idSensor, fecha_inicio, fecha_fin, Campos.VALOR).items():
+
+            y_pred = self.modelo.predict_one(fecha)
+            predLine = Generador_lineas.generar_linea(self.idSensor, Campos.ENTRENAMIENTO, fecha, round(y_pred,2))
+
+            if( type(valor) == type('')):
+                self.modelo.learn_one(fecha, 0)
+            else:
+                self.modelo.learn_one(fecha, valor)
+
+            dates.append(fecha)
+            predLines.append(predLine)
+
+        with open(PATH + '/entrenamientoData.json', "w") as file:
+            for pred in predLines:
+                file.write(pred + "\n")
+
+
+        Persistencia_modelo.guardar(self.modelo, self.nombreModelo)
+
+    def predecir(self, horizonte):
+
+        lista_preds = []
+
+        fecha = datetime.now().strftime('%Y-%m-%d  %H:%M:00')
+        fecha = datetime.strptime(fecha, '%Y-%m-%d  %H:%M:00')
+
+        for dia in range(0, horizonte):
+
+            fecha = fecha + relativedelta(minutes=1)
+            pred = self.model.predict_one(fecha)
+
+            predLine = Generador_lineas.generar_linea(self.idSensor, Campos.PREDICCION, fecha, round(pred,2))
+            lista_preds.append(predLine)
+
+        with open(PATH + '/pred.json', "w") as file:
+            for pred in lista_preds:
+                file.write(pred + "\n")
+                                               
