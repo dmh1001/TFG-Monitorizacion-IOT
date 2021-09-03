@@ -1,16 +1,16 @@
-#/bun/bash
+#!/bin/bash
 
 sensorId=$1
 minutos=$2
 
 fechaInicio=$(date +"%d/%m/%Y")
 horaInicio=$(date +"%H:%M:00")
-fechaFin=$(date +"%d/%m/%Y" -d '+ ' $minutos ' minutes')
-horaFin=$(date +"%H:%M:00" -d '+ ' $minutos ' minutes')
+fechaFin=$(date +"%d/%m/%Y" -d '+ '$minutos' minutes')
+horaFin=$(date +"%H:%M:00" -d '+ '$minutos' minutes')
+
 
 curl -XPOST -H 'Content-Type: application/json' localhost:9200/_all/_delete_by_query -d '{
 "query":
-
     {
       "bool":
       {
@@ -20,7 +20,6 @@ curl -XPOST -H 'Content-Type: application/json' localhost:9200/_all/_delete_by_q
             "match":
             {
               "sensorId":'$sensorId'
-
             }
           },
           {
@@ -39,6 +38,5 @@ curl -XPOST -H 'Content-Type: application/json' localhost:9200/_all/_delete_by_q
           }
         ]
       }
-
     }
 }'
