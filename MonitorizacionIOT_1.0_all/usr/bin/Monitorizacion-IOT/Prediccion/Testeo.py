@@ -1,9 +1,18 @@
+
+import os
+import sys
+
+PACKAGE_PARENT = '..'
+PATH = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
+sys.path.append(os.path.normpath(os.path.join(PATH, PACKAGE_PARENT)))
+
+
 from datetime import date
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-from Campos import *
-from Extractor import *
+from Utilidades.Campos import *
+from Utilidades.Extractor import *
 
 from math import sqrt
 
@@ -11,7 +20,6 @@ from sklearn.metrics import mean_squared_error
 from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import r2_score
 
-PATH="/usr/bin/Prediccion"
 
 class Testeo:
 

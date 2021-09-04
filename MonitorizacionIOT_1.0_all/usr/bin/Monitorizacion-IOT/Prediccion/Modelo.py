@@ -1,7 +1,3 @@
-PACKAGE_PARENT = '..'
-PATH=os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
-sys.path.append(os.path.normpath(os.path.join(PATH, PACKAGE_PARENT)))
-
 from river import compose
 from river import linear_model
 from river import preprocessing
@@ -11,6 +7,10 @@ from river import time_series
 
 import os
 import sys
+
+PACKAGE_PARENT = '..'
+PATH=os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
+sys.path.append(os.path.normpath(os.path.join(PATH, PACKAGE_PARENT)))
 
 from Utilidades.Extractor import *
 from Utilidades.Campos import *
@@ -93,7 +93,6 @@ class Modelo_SNARIMAX(Modelo):
         )
 
         return model
-
     def entrenar(self, fecha_inicio, fecha_fin):
 
         predLines = []
@@ -101,13 +100,11 @@ class Modelo_SNARIMAX(Modelo):
 
         for fecha, valor  in Extractor.extraer_data(self.idSensor, fecha_inicio, fecha_fin, Campos.VALOR).items():
 
-            y_pred = self.modelo.forecast(horizon=1, xs=[fecha])
-            predLine = Generador_lineas.generar_linea(self.idSensor, Campos.ENTRENAMIENTO, fecha, round(y_pred[0],2))
 
-            if( type(valor) == type('')):
-                self.modelo.learn_one(fecha, 0)
-            else:
-                self.modelo.learn_one(fecha, valor)
+            # Obtain the prior prediction and update the model in one go
+            y_pred = self.modelo.forecast(horizon=1, xs=[fecha])
+            predLine = Generador_lineas.generar_linea(self.idSensor, fecha,{Campos.ENTRENAMIENTO : round(y_pred[0],2)})
+            self.modelo.learn_one(fecha, valor)
 
             dates.append(fecha)
 
@@ -117,8 +114,9 @@ class Modelo_SNARIMAX(Modelo):
             for pred in predLines:
                 file.write(pred + "\n")
 
+
         Persistencia_modelo.guardar(self.modelo, self.nombreModelo)
-            
+
     def predecir(self, horizonte):
 
         lista_preds = []
@@ -137,12 +135,13 @@ class Modelo_SNARIMAX(Modelo):
         forecast = self.modelo.forecast(horizon=horizonte, xs=futuro)
 
         for i in range(len(forecast)):
-            predLine = Generador_lineas.generar_linea(self.idSensor, Campos.PREDICCION, dates[i], round(forecast[i],2))
+            predLine = Generador_lineas.generar_linea(self.idSensor, dates[i], {Campos.PREDICCION : round(forecast[i],2)})
             lista_preds.append(predLine)
 
         with open(PATH + '/pred.json', "w") as file:
             for pred in lista_preds:
                 file.write(pred + "\n")
+
 
 class Modelo_Detrender(Modelo):
 
@@ -185,13 +184,12 @@ class Modelo_Detrender(Modelo):
 
         for fecha, valor  in Extractor.extraer_data(self.idSensor, fecha_inicio, fecha_fin, Campos.VALOR).items():
 
+            # Obtain the prior prediction and update the model in one go
             y_pred = self.modelo.predict_one(fecha)
-            predLine = Generador_lineas.generar_linea(self.idSensor, Campos.ENTRENAMIENTO, fecha, round(y_pred,2))
+            predLine = Generador_lineas.generar_linea(self.idSensor, fecha,{Campos.ENTRENAMIENTO : round(y_pred,2)})
 
-            if( type(valor) == type('')):
-                self.modelo.learn_one(fecha, 0)
-            else:
-                self.modelo.learn_one(fecha, valor)
+            self.modelo.learn_one(fecha, valor)
+
 
             dates.append(fecha)
             predLines.append(predLine)
@@ -215,10 +213,13 @@ class Modelo_Detrender(Modelo):
             fecha = fecha + relativedelta(minutes=1)
             pred = self.model.predict_one(fecha)
 
-            predLine = Generador_lineas.generar_linea(self.idSensor, Campos.PREDICCION, fecha, round(pred,2))
+            predLine = Generador_lineas.generar_linea(self.idSensor, fecha, {Campos.PREDICCION : round(pred,2)})
+
             lista_preds.append(predLine)
 
         with open(PATH + '/pred.json', "w") as file:
             for pred in lista_preds:
                 file.write(pred + "\n")
                                                
+
+
