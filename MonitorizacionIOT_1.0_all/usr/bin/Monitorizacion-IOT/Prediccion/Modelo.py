@@ -1,15 +1,21 @@
+PACKAGE_PARENT = '..'
+PATH=os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
+sys.path.append(os.path.normpath(os.path.join(PATH, PACKAGE_PARENT)))
+
 from river import compose
 from river import linear_model
 from river import preprocessing
+import math
 from river import optim
 from river import time_series
 
 import os
+import sys
 
-from Extractor import *
-from Campos import *
+from Utilidades.Extractor import *
+from Utilidades.Campos import *
 from Persistencia_modelo import *
-from Generador_lineas import *
+from Utilidades.Generador_lineas import *
 
 from datetime import date
 from datetime import datetime
@@ -17,8 +23,6 @@ from dateutil.relativedelta import relativedelta
 
 import abc
 from abc import ABC
-
-PATH="/usr/bin/Prediccion"
 
 class Modelo(ABC):
 

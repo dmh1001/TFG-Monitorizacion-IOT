@@ -9,7 +9,7 @@
 usuario="prtgadmin"
 passhash=1331387211
 tiempoEspera=60 #segundos
-path="/usr/bin/DescargaData"
+path="/usr/bin/Monitorizacion_IOT/DescargaData"
 IP_PRTG="192.168.0.26:80"
 primeraEjecucion=true
 
@@ -48,6 +48,7 @@ function comparar_ficheros(){
 }
 
 
+
 while true
 do
         l=$listaIdSensores
@@ -72,7 +73,8 @@ do
                 then
 
                         descarga_datos_PRTG "$idSensor" "$fechaInicio" "$fechaFin" $path/logs/historic"$idSensor"_2.json
-                        transformar_datos "$idSensor" /$path/logs/historic"$idSensor"_2.json > $path/tempData"$idSensor"_2.json
+                        python3 $path/Transformar_data.py $idSensor /$path/logs/historic"$idSensor"_2.json $path/tempData"$idSensor"_2.json
+
                         comparar_ficheros $path/tempData"$idSensor".json $path/tempData"$idSensor"_2.json "$idSensor"
 
                         bash $path/Load_sensor_data.sh $path/load/load"$idSensor".json
@@ -81,7 +83,8 @@ do
                         rm $path/logs/historic"$idSensor"_2.json
                 else
                         descarga_datos_PRTG "$idSensor" $fechaInicio $fechaFin $path/logs/historic"$idSensor".json
-                        transformar_datos "$idSensor" $path/logs/historic"$idSensor".json > $path/tempData"$idSensor".json
+                        python3 $path/Transformar_data.py $idSensor /$path/logs/historic"$idSensor".json $path/tempData"$idSensor".json
+
                         bash $path/Load_sensor_data.sh $path/tempData"$idSensor".json
 
                         rm $path/logs/historic"$idSensor".json
@@ -90,7 +93,7 @@ do
                 sleep 40
                 #Entremaniento modelo
 
-                minutosPrediccion=60
+                minutosPrediccion=360
 
                 python3 $path/../Prediccion/Realizar_entrenamiento.py "$idSensor" "$fechaInicioAlgoritmo" "$fechaFinAlgoritmo"
 
@@ -110,4 +113,5 @@ do
         sleep $a
 
 done
+
 

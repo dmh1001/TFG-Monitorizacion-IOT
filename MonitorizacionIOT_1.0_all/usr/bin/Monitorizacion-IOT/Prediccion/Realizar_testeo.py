@@ -1,7 +1,9 @@
 import sys
 from Testeo import *
+import os
 
-PATH="/usr/bin/Prediccion"
+PATH = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
+
 
 if __name__ == "__main__":
 
