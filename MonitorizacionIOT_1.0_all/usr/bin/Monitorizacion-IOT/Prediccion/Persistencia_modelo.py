@@ -1,4 +1,5 @@
 import pickle
+from Modelo import *
 
 class Persistencia_modelo():
 
@@ -7,9 +8,12 @@ class Persistencia_modelo():
             with open(nombre , "rb") as file:
                 return pickle.load(file)
 
-        except FileNotFoundError as e:
-            print("Error, modelo no encontrado")
+        except Exception as e:
+            raise Exception
 
-    def guardar(modelo, nombre):
-        with open(nombre,"wb") as file:
-            pickle.dump(modelo, file)
+    def guardar(modelo):
+
+        with open(modelo.nombre,"wb") as file:
+            pickle.dump(modelo.modelo, file)
+
+

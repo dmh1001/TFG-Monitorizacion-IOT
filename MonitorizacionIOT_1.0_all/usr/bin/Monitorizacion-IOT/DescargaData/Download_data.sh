@@ -101,7 +101,7 @@ do
 
                 bash $path/BorrarDatosPredicciones.sh "$idSensor" $minutosPrediccion
 
-                python3 $path/../Prediccion/Realizar_prediccion.py "$idSensor" $minutosPrediccion
+                python3 $path/../Prediccion/Realizar_prediccion.py "$idSensor" "$fechaFinAlgoritmo" $minutosPrediccion
 
                 bash $path/Load_sensor_data.sh $path/../Prediccion/pred.json
 

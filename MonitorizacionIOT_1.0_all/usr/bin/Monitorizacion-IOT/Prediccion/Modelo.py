@@ -28,9 +28,8 @@ class Modelo(ABC):
 
     def __init__(self, idSensor):
          self.idSensor = idSensor
-
     @abc.abstractmethod
-    def _inicializar(self):
+    def inicializar(self):
         return
 
     @abc.abstractmethod
@@ -48,25 +47,24 @@ class Modelo_SNARIMAX(Modelo):
 
     def __init__(self, idSensor):
         Modelo.__init__(self, idSensor)
-        self.nombreModelo = PATH + '/modelos/modelSNARIMAX_' + str(idSensor) + '.pickle'
+        self.tipo = "SNARIMAX"
+        self.nombre = PATH + '/modelos/model'+self.tipo+'_' + str(idSensor) + '.pickle'
+        self.modelo = None
 
-        self.p = 0
-        self.d = 0
-        self.q = 2
-        self.m = 30
-        self.sp = 6
-        self.sq = 10
+    def cargar(self, modelo):
+        self.modelo = modelo
 
-        self.intercept_init = 12
-        self.sgd = 0.01
-        self.intercerpt_lr = 0.3
+    def inicializar(self, p = 0, d = 0, q = 0, m = 1, sp = 0, sq = 0, intercept_init = 0, sgd = 0, intercerpt_lr = 0):
+        self.p = p
+        self.d = d
+        self.q = q
+        self.m = m
+        self.sp = sp
+        self.sq = sq
 
-        if os.path.exists(self.nombreModelo):
-            self.modelo = Persistencia_modelo.cargar(self.nombreModelo)
-        else:
-            self.modelo = self._inicializar()
-
-    def _inicializar(self):
+        self.intercept_init = intercept_init
+        self.sgd = sgd
+        self.intercerpt_lr = intercerpt_lr
 
         extract_features = compose.TransformerUnion(
             Modelo._get_ordinal_date,
@@ -92,39 +90,27 @@ class Modelo_SNARIMAX(Modelo):
             )
         )
 
-        return model
-    def entrenar(self, fecha_inicio, fecha_fin):
+        self.modelo = model
 
-        predLines = []
-        dates =[]
+    def entrenar(self, datos):
 
-        for fecha, valor  in Extractor.extraer_data(self.idSensor, fecha_inicio, fecha_fin, Campos.VALOR).items():
+        datosEntrenamiento = {}
 
+        for fecha, valor  in datos.items():
 
-            # Obtain the prior prediction and update the model in one go
             y_pred = self.modelo.forecast(horizon=1, xs=[fecha])
-            predLine = Generador_lineas.generar_linea(self.idSensor, fecha,{Campos.ENTRENAMIENTO : round(y_pred[0],2)})
+            datosEntrenamiento[fecha] = round(y_pred[0],2)
             self.modelo.learn_one(fecha, valor)
 
-            dates.append(fecha)
+        return datosEntrenamiento
 
-            predLines.append(predLine)
+    def predecir(self, fecha_inicial, horizonte):
 
-        with open(PATH + '/entrenamientoData.json', "w") as file:
-            for pred in predLines:
-                file.write(pred + "\n")
-
-
-        Persistencia_modelo.guardar(self.modelo, self.nombreModelo)
-
-    def predecir(self, horizonte):
-
-        lista_preds = []
+        datosPredichos = {}
         futuro = []
         dates = []
 
-        fecha = datetime.now().strftime('%Y-%m-%d  %H:%M:00')
-        fecha = datetime.strptime(fecha, '%Y-%m-%d  %H:%M:00')
+        fecha = fecha_inicial
 
         for dia in range(0, horizonte):
 
@@ -135,30 +121,31 @@ class Modelo_SNARIMAX(Modelo):
         forecast = self.modelo.forecast(horizon=horizonte, xs=futuro)
 
         for i in range(len(forecast)):
-            predLine = Generador_lineas.generar_linea(self.idSensor, dates[i], {Campos.PREDICCION : round(forecast[i],2)})
-            lista_preds.append(predLine)
 
-        with open(PATH + '/pred.json', "w") as file:
-            for pred in lista_preds:
-                file.write(pred + "\n")
+            datosPredichos[dates[i]] = round(forecast[i],2)
+
+        return datosPredichos
+
+    def __str__(self):
+        return "Modelo de típo: %s para el sensor: %s" %(self.tipo, self.idSensor)
 
 
 class Modelo_Detrender(Modelo):
 
     def __init__(self, idSensor):
         Modelo.__init__(self, idSensor)
-        self.nombreModelo = PATH + '/modelos/modelDetrender_' + str(idSensor) + '.pickle'
+        self.tipo = "Detrender"
+        self.nombre = PATH + '/modelos/model'+self.tipo+'_' + str(idSensor) + '.pickle'
+        self.modelo = None
 
-        self.Window = 12
-        self.intercept_lr = 0
-        self.sgd = 0.03
+    def cargar(self, modelo):
+        self.modelo = modelo
 
-        if os.path.exists(self.nombreModelo):
-            self.modelo = Persistencia_modelo.cargar(self.nombreModelo)
-        else:
-            self.modelo = self._inicializar()
+    def inicializar(self, sgd, window = None, intercept_lr = 0):
 
-    def _inicializar(self):
+        self.window = window
+        self.intercept_lr = intercept_lr
+        self.sgd = sgd
 
 
         extract_features = compose.TransformerUnion(Modelo._get_ordinal_date)
@@ -174,52 +161,40 @@ class Modelo_Detrender(Modelo):
 
         model = time_series.Detrender(regressor=model, window_size=self.window)
 
-
         return model
 
-    def entrenar(self, fecha_inicio, fecha_fin):
+    def entrenar(self, datos):
 
-        predLines = []
-        dates =[]
+        datosEntrenamiento = {}
 
-        for fecha, valor  in Extractor.extraer_data(self.idSensor, fecha_inicio, fecha_fin, Campos.VALOR).items():
+        for fecha, valor  in datos.items():
 
-            # Obtain the prior prediction and update the model in one go
             y_pred = self.modelo.predict_one(fecha)
-            predLine = Generador_lineas.generar_linea(self.idSensor, fecha,{Campos.ENTRENAMIENTO : round(y_pred,2)})
+            datosEntrenamiento[fecha] = round(y_pred,2)
 
             self.modelo.learn_one(fecha, valor)
 
+        return datosEntrenamiento
 
-            dates.append(fecha)
-            predLines.append(predLine)
+    def predecir(self, fecha_inicial, horizonte):
 
-        with open(PATH + '/entrenamientoData.json', "w") as file:
-            for pred in predLines:
-                file.write(pred + "\n")
+        datosPredichos = {}
 
-
-        Persistencia_modelo.guardar(self.modelo, self.nombreModelo)
-
-    def predecir(self, horizonte):
-
-        lista_preds = []
-
-        fecha = datetime.now().strftime('%Y-%m-%d  %H:%M:00')
-        fecha = datetime.strptime(fecha, '%Y-%m-%d  %H:%M:00')
-
+        fecha = fecha_inicial
         for dia in range(0, horizonte):
-
             fecha = fecha + relativedelta(minutes=1)
             pred = self.model.predict_one(fecha)
+            datosPredichos[fecha] = pred
 
-            predLine = Generador_lineas.generar_linea(self.idSensor, fecha, {Campos.PREDICCION : round(pred,2)})
+        return datosPredichos
 
-            lista_preds.append(predLine)
+    def __str__(self):
+        return "Modelo de típo: %s para el sensor: %s" %(self.tipo, self.idSensor)
 
-        with open(PATH + '/pred.json', "w") as file:
-            for pred in lista_preds:
-                file.write(pred + "\n")
-                                               
+
+
+
+
+
 
 
