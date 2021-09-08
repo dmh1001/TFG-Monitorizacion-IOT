@@ -1,7 +1,9 @@
 from datetime import datetime
 from elasticsearch import Elasticsearch
 
-
+'''
+Clase que descarga datos desde la base de datos de elasticsearch
+'''
 class Extractor:
 
     def extraer_data(idSensor, fecha_inicio, fecha_final, campo):

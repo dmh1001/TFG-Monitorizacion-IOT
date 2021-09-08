@@ -1,6 +1,9 @@
 import json
 from .Generador_lineas import *
 
+'''
+Clase que transforma ficheros obtenidos desde PRTG
+'''
 class Transformador_sensor_data:
 
     def transformarJSON(fichero, idSensor):

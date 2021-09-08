@@ -21,7 +21,6 @@ if __name__ == "__main__":
 
     if(len(modelos) == 1):
         nombreModelo = modelos[0]
-        print(nombreModelo)
 
         try:
             tipoModelo = re.sub("model","",nombreModelo).split("_")[0]
@@ -47,7 +46,7 @@ if __name__ == "__main__":
         for fecha, valor in datosPredichos.items():
             lines.append(Generador_lineas.generar_linea(idSensor, fecha,{Campos.PREDICCION : valor}))
 
-        with open(PATH + '/pred.json', "w") as file:
+        with open(PATH + '/tempData_prediccion.json', "w") as file:
             for pred in lines:
                 file.write(pred + "\n")
     elif(len(modelos) > 1):

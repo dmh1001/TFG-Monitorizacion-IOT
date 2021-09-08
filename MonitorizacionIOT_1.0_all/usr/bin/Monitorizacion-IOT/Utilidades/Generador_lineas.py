@@ -1,6 +1,10 @@
 from datetime import date
 from datetime import datetime
 
+'''
+Clase que genera las líneas de texto legibles para poder ser procesadas por logstash 
+
+'''
 class Generador_lineas:
     def generar_linea(idSensor, date, reading):
 

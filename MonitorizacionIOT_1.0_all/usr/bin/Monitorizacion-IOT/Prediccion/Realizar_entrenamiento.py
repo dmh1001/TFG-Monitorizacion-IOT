@@ -24,7 +24,6 @@ if __name__ == "__main__":
 
         try:
             tipoModelo = re.sub("model","",nombreModelo).split("_")[0]
-            print(tipoModelo)
 
             if(tipoModelo == "Detretor"):
                 model = Persistencia_modelo.cargar(PATH + "/modelos/" + nombreModelo)
@@ -37,8 +36,6 @@ if __name__ == "__main__":
                 modelo = Modelo_SNARIMAX(idSensor)
                 modelo.cargar(model)
 
-            print(modelo)
-
             datos = Extractor.extraer_data(idSensor, fecha_inicio, fecha_final, Campos.VALOR)
 
             datosEntrenamiento = modelo.entrenar(datos)
@@ -49,7 +46,7 @@ if __name__ == "__main__":
             for fecha, valor in datosEntrenamiento.items():
                 lines.append(Generador_lineas.generar_linea(idSensor, fecha,{Campos.ENTRENAMIENTO : valor}))
 
-            with open(PATH + '/entrenamientoData.json', "w") as file:
+            with open(PATH + '/tempData_entrenamiento.json', "w") as file:
                 for pred in lines:
                     file.write(pred + "\n")
 

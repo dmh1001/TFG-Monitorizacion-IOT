@@ -24,6 +24,7 @@ from dateutil.relativedelta import relativedelta
 import abc
 from abc import ABC
 
+
 class Modelo(ABC):
 
     def __init__(self, idSensor):
@@ -43,6 +44,9 @@ class Modelo(ABC):
     def _get_ordinal_date(x):
         return {'ordinal_date': x.hour * 60 + x.minute}
 
+'''
+Modelo SNARIMAX (S)easonal (N)on-linear (A)uto(R)egressive (I)ntegrated (M)oving-(A)verage with e(X)ogenous
+'''
 class Modelo_SNARIMAX(Modelo):
 
     def __init__(self, idSensor):
@@ -130,6 +134,9 @@ class Modelo_SNARIMAX(Modelo):
         return "Modelo de típo: %s para el sensor: %s" %(self.tipo, self.idSensor)
 
 
+'''
+Modelo Detrender
+'''
 class Modelo_Detrender(Modelo):
 
     def __init__(self, idSensor):

@@ -13,6 +13,7 @@ path="/usr/bin/Monitorizacion_IOT/DescargaData"
 IP_PRTG="192.168.0.26:80"
 primeraEjecucion=true
 
+horizontePrediccion=360  # en minutos
 
 listaIdSensores="2051 2052" # TODO: los ids se tendran que almacenar en otro sitio
 
@@ -35,7 +36,8 @@ function descarga_datos_PRTG(){
 
 function transformar_datos(){
 
-        $path/Transforma_sensor_data $2 $1
+        $path/../Utilidades/Transforma_sensor_data $2 $1
+
 }
 
 # Función que compara dos ficheros y devuelve las lineas que no tienen en comun.
@@ -72,38 +74,54 @@ do
                 if [ -f $path/tempData"$idSensor".json ]
                 then
 
+                       
                         descarga_datos_PRTG "$idSensor" "$fechaInicio" "$fechaFin" $path/logs/historic"$idSensor"_2.json
-                        python3 $path/Transformar_data.py $idSensor /$path/logs/historic"$idSensor"_2.json $path/tempData"$idSensor"_2.json
 
-                        comparar_ficheros $path/tempData"$idSensor".json $path/tempData"$idSensor"_2.json "$idSensor"
+                        python3 $path/Transformar_data.py $idSensor /$path/logs/historic"$idSensor"_2.json $path/tempDataSensores/tempData"$idSensor"_2.json
+
+                        comparar_ficheros $path/tempDataSensores/tempData"$idSensor".json $path/tempDataSensores/tempData"$idSensor"_2.json "$idSensor"
 
                         bash $path/Load_sensor_data.sh $path/load/load"$idSensor".json
 
-                        cat $path/tempData"$idSensor"_2.json > $path/tempData"$idSensor".json
+                        cat $path/tempDataSensores/tempData"$idSensor"_2.json > $path/tempDataSensores/tempData"$idSensor".json
                         rm $path/logs/historic"$idSensor"_2.json
+
                 else
                         descarga_datos_PRTG "$idSensor" $fechaInicio $fechaFin $path/logs/historic"$idSensor".json
-                        python3 $path/Transformar_data.py $idSensor /$path/logs/historic"$idSensor".json $path/tempData"$idSensor".json
 
-                        bash $path/Load_sensor_data.sh $path/tempData"$idSensor".json
+                        python3 $path/Transformar_data.py $idSensor /$path/logs/historic"$idSensor".json $path/tempDataSensores/tempData"$idSensor".json
+
+                         bash $path/Load_sensor_data.sh $path/tempDataSensores/tempData"$idSensor".json
 
                         rm $path/logs/historic"$idSensor".json
+
                 fi
 
                 sleep 40
-                #Entremaniento modelo
 
-                minutosPrediccion=360
+                # Entrenamiento
+
+                if [ -f $path/../Prediccion/tempData_entrenamiento.json ]
+                then
+                        rm $path/../Prediccion/tempData_entrenamiento.json
+                fi
 
                 python3 $path/../Prediccion/Realizar_entrenamiento.py "$idSensor" "$fechaInicioAlgoritmo" "$fechaFinAlgoritmo"
 
-                bash $path/Load_sensor_data.sh $path/../Prediccion/entrenamientoData.json
+                bash $path/Load_sensor_data.sh $path/../Prediccion/tempData_entrenamiento.json
 
-                bash $path/BorrarDatosPredicciones.sh "$idSensor" $minutosPrediccion
+                # Predicción
 
-                python3 $path/../Prediccion/Realizar_prediccion.py "$idSensor" "$fechaFinAlgoritmo" $minutosPrediccion
+                if [ -f $path/../Prediccion/tempData_prediccion.json ]
+                then
+                        rm $path/../Prediccion/tempData_prediccion.json
+                fi
 
-                bash $path/Load_sensor_data.sh $path/../Prediccion/pred.json
+                bash $path/BorrarDatosPredicciones.sh "$idSensor" $horizontePrediccion
+
+                python3 $path/../Prediccion/Realizar_prediccion.py "$idSensor" "$fechaFinAlgoritmo" $horizontePrediccion
+
+                bash $path/Load_sensor_data.sh $path/../Prediccion/tempData_prediccion.json
 
 
         done

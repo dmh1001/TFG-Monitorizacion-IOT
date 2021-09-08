@@ -1,6 +1,10 @@
 import pickle
 from Modelo import *
 
+'''
+Clase que gestiona la persistencia en disco un modelo
+
+'''
 class Persistencia_modelo():
 
     def cargar(nombre):
