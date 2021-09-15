@@ -1,85 +1,85 @@
 \capitulo{3}{Conceptos teóricos}
 
-En aquellos proyectos que necesiten para su comprensión y desarrollo de unos conceptos teóricos de una determinada materia o de un determinado dominio de conocimiento, debe existir un apartado que sintetice dichos conceptos.
+En este apartado se desarrollarán los principales conceptos teóricos que facilitarán el entendimiento del trabajo.
 
-Algunos conceptos teóricos de \LaTeX \footnote{Créditos a los proyectos de Álvaro López Cantero: Configurador de Presupuestos y Roberto Izquierdo Amo: PLQuiz}.
+\subsection{El Internet de las Cosas (IOT)}
+El Internet de las Cosas (en inglés \textit{Internet of things} IOT) es la red de objetos físicos que incorpora sensores, software y otras tecnologías con la finalidad de aportar datos a otros dispositivos a través de Internet.\cite{pagina:Oracle_IOT}
 
-
-
-\section{Secciones}
-
-Las secciones se incluyen con el comando section.
-
-\subsection{Subsecciones}
-
-Además de secciones tenemos subsecciones.
-
-\subsubsection{Subsubsecciones}
-
-Y subsecciones. 
+En las últimas décadas se ha visto incrementada esta tecnología debida a la rápida evolución de internet con la aparición de servicios de almacenamiento de tipo nube y el avance en el hardware ha permitido que estos objetos recopilen datos con una intervención humana mínima.
 
 
-\section{Referencias}
+\subsection{Big Data}
 
-Las referencias se incluyen en el texto usando cite \cite{wiki:latex}. Para citar webs, artículos o libros \cite{koza92}.
+El Big Data está formado por conjuntos complejos de datos de un elevado tamaño y con una gran velocidad de crecimiento. Estos conjuntos de datos tienen tal volumen que es imposible de almacenarlos, gestionarlos, procesarlos y/o analizarlos con software de procesamientos de datos convencionales.
+
+Pese a su dificultad, estos volúmenes tan masivos son de gran utilidad para abordad problemas de todo tipo que no habrían sido posibles de solucionar antes. \cite{pagina:Oracle_big_data}
+
+\subsection{Anomalías}
+
+En Big Data las anomalías son datos que no siguen el patrón natural de la mayoría de los datos, esto puede ser síntoma de algún tipo de fallo o de algún evento no esperado. 
+
+Para detectar estas anomalías o comportamientos atípicos es necesario distinguir en un conjunto de datos cuales son anomalías. Esta puede ser una tarea extremadamente difícil en conjuntos de gran tamaño como se da en Big Data, para ello es necesario la incorporación de modelos de machine learning que identifiquen estas anomalías.
+
+\subsection{Data stream}
+
+Data stream son series de datos ordenados por tiempo que se generan de forma continua y desde diversas fuentes.
 
 
-\section{Imágenes}
+\subsection{Time series}
+Time series o serie temporal es una sucesión de datos ordenados de forma cronológica.
 
-Se pueden incluir imágenes con los comandos standard de \LaTeX, pero esta plantilla dispone de comandos propios como por ejemplo el siguiente:
-
-\imagen{escudoInfor}{Autómata para una expresión vacía}
-
+A la hora de realizar predicciones el tiempo es normalmente la variable independiente y el objetivo es realizar predicciones a futuro \cite{pagina:toward_data_scince}
 
 
-\section{Listas de items}
+\subsection{Inteligencia artificial}
 
-Existen tres posibilidades:
+La inteligencia artificial o IA es la simulación de inteligencia humana por parte de las máquinas, incluyendo el aprendizaje, el razonamiento y la auto corrección.
+
+Dicha disciplina alberga muchos campos cómo pueden ser el aprendizaje automático (Machine learning) o el aprendizaje profundo (Deep Learnng)
+
+Actualmente la inteligencia artificial se aplica a cualquier campo, pudiendo realizar tareas que por otros medios serían imposibles.\cite{pagina:techtarget}  
+
+\subsection{Machine learning}
+
+Machine learning es una rama derivada de la inteligencia artificial que se centra en el uso de datos y algoritmos para imitar el aprendizaje humano. \cite{pagina:IBM_Machine_learning}
+
+Se puede dividir los algoritmos de machine learning en tres partes:
 
 \begin{itemize}
-	\item primer item.
-	\item segundo item.
+    \item \textbf{Proceso de decisión}: por lo general los algoritmos de machine learning se utilizan para problemas de predicción o clasificación con la ayuda de datos (los cuales pueden estar etiquetados o no) el algoritmo será capaz de estimar patrones en los datos proporcionados.
+    \item \textbf{Función de error}: una función de error que sirva para evaluar las predicciones del modelo y medir la precisión del mismo.
+    
+    \item \textbf{Proceso de optimización del modelo}: Si el modelo puede mejorar la precisión con los datos de entrenamiento entonces se ajustan los pesos. El algoritmo repitiera este proceso hasta que se haya llegado al umbral de precisión.
+
 \end{itemize}
 
-\begin{enumerate}
-	\item primer item.
-	\item segundo item.
-\end{enumerate}
 
-\begin{description}
-	\item[Primer item] más información sobre el primer item.
-	\item[Segundo item] más información sobre el segundo item.
-\end{description}
-	
-\begin{itemize}
-\item 
-\end{itemize}
 
-\section{Tablas}
+\subsubsection{Aprendizaje supervisado}
+El aprendizaje supervisado utiliza datos etiquetados, es decir, datos para los que se conoce la respuesta para entrenar el modelo que será capaz de clasificar o predecir cuándo se le presenten datos de los que se desconoce la respuesta. 
 
-Igualmente se pueden usar los comandos específicos de \LaTeX o bien usar alguno de los comandos de la plantilla.
 
-\tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
-{ \multicolumn{1}{l}{Herramientas} & App AngularJS & API REST & BD & Memoria \\}{ 
-HTML5 & X & & &\\
-CSS3 & X & & &\\
-BOOTSTRAP & X & & &\\
-JavaScript & X & & &\\
-AngularJS & X & & &\\
-Bower & X & & &\\
-PHP & & X & &\\
-Karma + Jasmine & X & & &\\
-Slim framework & & X & &\\
-Idiorm & & X & &\\
-Composer & & X & &\\
-JSON & X & X & &\\
-PhpStorm & X & X & &\\
-MySQL & & & X &\\
-PhpMyAdmin & & & X &\\
-Git + BitBucket & X & X & X & X\\
-Mik\TeX{} & & & & X\\
-\TeX{}Maker & & & & X\\
-Astah & & & & X\\
-Balsamiq Mockups & X & & &\\
-VersionOne & X & X & X & X\\
-} 
+\subsection{Incremental/online learning}
+
+El aprendizaje incremental son todos aquellos algoritmos escalables que aprenden de forma secuencial y van mejorando el modelo de forma constante con un flujo infinito de datos.
+
+En el aprendizaje incremental no tenemos acceso a todo el conjunto de datos cuando creamos el modelo, sino que tenemos que crear dicho modelo para que se adapte y aprenda según tenga acceso a los datos. 
+
+Esta técnica de machine learning es muy útil cuando se manejan datos a tiempo real donde cada minuto se generan nuevos datos, cómo puede ser el caso de sensores.
+
+
+\subsection{NoSQL}
+
+\textit{Not Only SQL}, estas bases de datos, son diseñadas para modelos de datos específicos y cuentan con esquemas flexibles. Están optimizadas para aplicaciones que requieren una gran cantidad de datos, baja latencia y un modelo de datos flexibles.
+
+Existen una gran cantidad de bases de datos NoSQL: clave-valor, Documentos, Gráficos, etc...
+
+\subsubsection{Documentos}
+
+En este tipo de bases de datos, los datos se representan como un objeto o documento de tipo JSON (debido a que para los desarrolladores es un modelo de datos eficiente e intuitivo).\cite{pagina:AWS_NoSQL}
+
+
+\section{Daemons}
+
+En informático, un daemon es un programa que se ejecuta cómo un proceso en segundo plano.
+En Linux los daemons son administrados por \textit{systemd} y se administran mediante el comando \textit{systemctl}. Estos leen los archivos con el nombre \textit{nombre.Service} que contiene información sobre cómo se ha de inicializar. Estos archivos se almacenan en \textit{/\{etc,usr/lib,run\}/systemd/system}\cite{pagina:daemons_linux}

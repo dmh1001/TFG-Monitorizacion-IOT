@@ -10,12 +10,12 @@ algunas de las alternativas más populares que he considerado son las siguientes
 
 Apache Kafka es un sistema de intermediación de mensajes que responde al patrón "Publish/Subscribe Messaging" que se utiliza para la comunicación entre aplicaciones. Entre sus principales características se encuentran que es un sistema escalable y persistente, con gran tolerancia a fallos y gran velocidad tanto de escritura cómo de lectura.
 
-Para transmitir estos datos Kafka crea Topics, flujos de datos que a su vez se dividen en particiones, cada mensaje se almacena en una de estas particiones.
+Para transmitir estos datos Kafka crea \textit{Topics}, flujos de datos que a su vez se dividen en particiones, cada mensaje se almacena en una de estas particiones.
 
 Debido a su popularidad es una herramienta bien documentada \cite{documentacion:kafka} tanto por la propia compañía cómo los usuarios. \cite{pagina:kafka}
 
 \subsection{Apache Airflow}
-Apache Airflow es una plataforma open-source que nos permite automatizar tareas con la ayuda de scripts y mediante el uso de un planificador para llevar a cabo numerosas tareas. Permite la utilización de DAGs (Grafo acíclico dirigido) y crear pipelines dinámicas, mediante Python. 
+Apache Airflow es una plataforma open-source que nos permite automatizar tareas con la ayuda de scripts y mediante el uso de un planificador para llevar a cabo numerosas tareas. Permite la utilización de DAGs (Grafo acíclico dirigido) y crear pipelines dinámicos, mediante Python. 
 
 Apache Airflow tiene una curva de aprendizaje elevada y puede resultar complicado para los usuarios\cite{pagina:HEVO}
 
@@ -24,19 +24,19 @@ Es un procesador de flujo a tiempo real, usa Apache Kafka para la mensajería y 
 
 \subsection{Apache Flume}
 
-Apache Flume es un servicio distribuido capaz de mover grandes cantidades de datos y logs, este forma parte del ecosistema de Hadoop. Su arquitectura es tanto flexible cómo sencilla aunque presenta cierta dificultad a la hora de escalar. Esta basado en flujo de datos en Streaming permitiendo múltiples flujos.\cite{pagina:Flume}
+Apache Flume es un servicio distribuido capaz de mover grandes cantidades de datos y logs, este forma parte del ecosistema de Hadoop. Su arquitectura es tanto flexible cómo sencilla. aunque presenta cierta dificultad a la hora de escalar. Está basado en flujo de datos en Streaming permitiendo múltiples flujos.\cite{pagina:Flume}
 
 \section{Visualización y análisis de datos}
 
-Para monitorizar nuestros datos debemos hacer uso de herramientas de Network monitoring que nos permita detectar fallos y anomalías en los datos así cómo alertarnos si alguno de los datos monitorizados pasan por debajo de un umbral.
+Para monitorizar nuestros datos debemos hacer uso de herramientas de Network monitoring que nos permita detectar fallos y anomalías en los datos así cómo alertarnos si alguno de los datos monitorizados pasa por debajo de un umbral.
 
 \subsection{PRTG Network Monitor}
 
-PRTG Network Monitor es una herramienta de monitorización de Paessler, nos permite supervisar y monitorizar datos de sensores,  la versión gratuita esta limitada a 100 sensores, una de las ventajas de PRTG es la cantidad de variedad de sensores que existen de forma predefinida. Nos permite mostrar alertas al encontrar problemas o métricas inusuales y estas nos pueden llegar de diversas formas.\cite{pagina:PRTG}
+PRTG Network Monitor es una herramienta de monitorización de Paessler, nos permite supervisar y monitorizar datos de sensores, la versión gratuita está limitada a 100 sensores, una de las ventajas de PRTG es la cantidad de variedad de sensores que existen de forma predefinida. Nos permite mostrar alertas al encontrar problemas o métricas inusuales y estas nos pueden llegar de diversas formas.\cite{pagina:PRTG}
 
 \subsection{ThingSpeak}
 
-ThinkSpeak es una plataforma open source orientada al internet de las cosas (IOT) que nos permite recoger, almacenar datos de sensores en la nube usando el protocolo HTTP y visualizar los datos. También nos permite realizar análisis de los datos usando MATLAB. 
+ThinkSpeak es una plataforma open source orientada al Internet de las Cosas (IOT) que nos permite recoger, almacenar datos de sensores en la nube usando el protocolo HTTP y visualizar los datos. También nos permite realizar análisis de los datos usando MATLAB. 
 
 ThingSpeak consta de aplicaciones complementarias con diversas funcionalidades. \cite{pagina:ThingSpeak}
 
@@ -45,7 +45,7 @@ ThingSpeak consta de aplicaciones complementarias con diversas funcionalidades. 
 Grafana nos permite visualizar y representar métricas de datos sin importar donde estén almacenados, la visualización es rápida y flexible con multitud de opciones. En Grafana se pueden definir alertas sobre las métricas que deseemos y mandarnos notificaciones de las mismas, también cuenta con cientos de plugins oficiales. 
 
 Contiene una opción de pago en la que ellos albergan ellos el servidor y otro completamente gratuita en la que nosotros podremos ejecutarlo en cualquiera de los sistemas operativos principales.\cite{pagina:Grafana}
-\section{Splunk}
+\subsection{Splunk}
 Splunk es una plataforma que nos permite monitorizar, buscar y analizar nuestros datos en tiempo real, esta herramienta consta con cientos de aplicaciones y es compatible con casi cualquier formato de logs. Splunk es gratis con un volumen de datos diarios de menos de 500MB. \cite{pagina:Splunk}
 
 Uno de sus atractivos es que consta de una herramienta machine learning que aprende de tus datos detectando anomalías y prediciéndolas.
@@ -58,17 +58,31 @@ Debido a que la empresa que nos iba a facilitar los datos de los sensores utiliz
 \subsection{Algolia}
 Algolia es un motor de búsqueda accesible vía API, la cual se puede integrar en web y aplicaciones móviles. Funciona exclusivamente con datos en formato JSON. Algolia posee una inteligencia artificial que aprende del usuario para mejorar su experiencia de uso. Consta de una versión gratuita, la cual tiene limitada el número de resultados de búsqueda.\cite{pagina:Algolia}
 
-\subsection{ElasticSearch}
-ElasticSearch es uno de los motor de búsqueda mas valorados del mercado\cite{ranking:DB-Engines} , de código abierto que proporciona análisis y búsqueda de datos a tiempo real. Esta desarrollado en Java y sólo soporta JSON cómo tipos de respuesta.
+\subsection{Elasticsearch}
+Elasticsearch es uno de los motores de búsqueda más valorados del mercado\cite{ranking:DB-Engines} , de código abierto que proporciona análisis y búsqueda de datos a tiempo real. Esta desarrollado en Java y sólo soporta JSON cómo tipos de respuesta.
 
 Posee una arquitectura distribuida siendo la escalabilidad horizontal, una de sus ventajas es su rapidez a la hora de realizar búsquedas de textos complejos para facilitar esto funciona mediante índices invertidos.\cite{pagina:ElasticSearch}  
+
 \subsection{Solr}
-Apache Solr es un motor de búsqueda open source escrito en java con comandos escritos en HTTP y guarda los archivos utilizando XML. Esta optimizado para trafico de altos volúmenes de datos y todo en tiempo real.\cite{pagina:Solr} 
+Apache Solr es un motor de búsqueda open source escrito en java con comandos escritos en HTTP y guarda los archivos utilizando XML. Esta optimizado para tráfico de altos volúmenes de datos y todo en tiempo real.\cite{pagina:Solr} 
 
-Debido a que el entorno de ElasticSearch nos facilita la ingesta de datos, almacenamiento y la posterior visualización de los mismos se ha elegido esa opción.
+Debido a que el entorno de ElasticSearch nos facilita la ingesta de datos, almacenamiento y la posterior visualización de estos se ha elegido esa opción.
 
+\section{Control de versiones}
 
-\section{librerias}
+Herramientas consideradas: GitHub y GitLab.
+
+Para organizar el proyecto he elegido la plataforma de control de versiones de GitHub debido a ser el software de versiones Git más utilizado y con el cual tengo más experiencia.
+
+\section{Lenguajes de programación}
+
+\subsection{Python}
+Python es un lenguaje de programación multiplataforma y multiparagigma, soporta tanto programación orientación a objetos cómo programación imperativa. Es un lenguaje cuya sintaxis se centra en un código legible y sintaxis clara. \cite{pagina:Python_documentation}
+
+\subsection{Bash}
+GNU Bash es una interfaz de usuario de línea de comandos y un lenguaje de programación de scripting, se creó originalmente para el sistema operativo GNU. Actualmente disponible en la mayoría de distribuciones GNU/Lunux, Mac OS X y también tiene versiones para Windows 10 y Andoroid.
+
+\section{librerias Python}
 
 \subsection{Scikit-learn}
 
@@ -80,25 +94,40 @@ Scikit-learn trabaja a su vez con otras librerías cómo NumPy, SciPy, pandas, S
 
 Scikit-multiflow es una librería de machine learning para python dedicada a streaming data y multi-output learning que nos permite generar y evaluar data streams.\cite{pagina:scikit-mutliflow}
 
+\subsection{NumPy}
+NumPy es una librería de Python especializada en el cálculo numérico y computación de datos. 
 
-\section{Control de versiones}
+\subsection{Pandas}
 
-Herramientas consideradas: GitHub y GitLab.
+Pandas es una librería open source de programación para Python y utilizando cómo extensión NumPy, se utiliza para análisis de datos, ofreciendo estructuras de datos y operaciones con tablas numéricas y series temporales.\cite{pagina:wiki_pandas}
 
-Para organizar el proyecto he elegido la plataforma de control de versiones de GitHub debido a ser el software de versiones Git más utilizado y con el cual tengo más experiencia.
+
+\subsection{River}
+River es una librería de maching learning en streaming para python, juntando las librerías creme y sckit-multiflow.
+
+Es una librería reciente por lo que la documentación no está completa y aún no hay muchos proyectos que hayan utilizado la librería.\cite{pagina:River}
+
+\section{Archivos de texto}
+\subsection{JSON}
+El formato de texto JSON (JavaScript Object Notation) se utiliza para el intercambio de datos. Resulta sencillo tanto de leerlo cómo de escribirlo para los humanos y sencillo de interpretarlo y generarlo para las máquinas.
+
+El formato JSON es independiente del lenguaje JavaScript.
+
+En este trabajo he decidido utilizar JSON para el intercambio de datos sobre otros formatos como CSV por su sencillez y su compatibilidad con PRTG y ElasticSearch.\cite{pagina:JSON}
+
+
 
 
 \section{Sistemas Operativos}
 
 \subsection{Windows 10}
-Debido a que en la empresa que nos iba a facilitar los datos utilizan PRTG para monitorizar los sensores y este es exclusivo de Windows no tenía más alternativa que utilizar este sistema operativo para alvergar mi servidor PRTG.
+Debido a que en la empresa que nos iba a facilitar los datos utilizan PRTG para monitorizar los sensores y este es exclusivo de Windows no tenía más alternativa que utilizar este sistema operativo para albergar mi servidor PRTG.
 
 \subsection{Ubuntu Server 20.04.2}
 Para albergar tanto ElasticSearch como el he escogido la última versión de ubuntu server debido a que es muy ligera 
 \section{IDEs}
 
 \subsection{\LaTeX}
-
 Herramientas consideradas: Overleaf y Textmaker
 
 La herramienta que he decidido utilizar para redactar la memoria ha sido Overleaf divido a que es un editor \LaTeX basado en la nube y no requiere de ninguna instalación previa.
@@ -112,13 +141,28 @@ Para la edición de archivos de texto en el servidor de Ubuntu he decidido utili
 Para albergar las máquinas virtuales he utilizado VirtualBox debido a ser la herramienta open source más famosa de virtualización.
 
 \section{Procesadores de lenguaje}
-
 Herramientas consideradas: Flex, Bison, JavaCC
 
 Debido a la baja complejidad y el poco uso que le iba a dar a esta herramienta he decidido utilizar Flex, un analizador de lenguaje open source.
 
-
 \section{Comunicación}
 \subsection{Microsoft Teams}
-
 Microsoft Teams es una plataforma de comunicación y colaboración para reuniones telemáticas.
+
+
+\section{Cliente SSH}
+\subsection{PuTTY}
+PuTTY es un cliente SSH  y telnet con licencia libre.
+
+Este software nos permitirá conectarnos de forma remota a nuestro Ubuntu server así cómo intercambiar ficheros.
+
+\section{ELK Stack}
+ELK es la combinación de Elasticsearch, Logstash y Kibana, 
+\subsection{Elasticsearch}
+Cómo se comentado con anterioridad en el apartado de motores de búsqueda Elasticsearch se encarga del almacenamiento de datos y aporta un potente motor de búsqueda.
+
+\subsection{Logstash}
+Logstash es un pipeline de procesamiento de datos capaz de ingresar datos de múltiples fuentes y enviarlos a una variedad de salidas, pero en el caso de nuestro programa será Elasticsearch.
+
+\subsection{Kibana}
+Kibana es una interfaz de usuario que permite la visualización de datos de Elasticsearch. Esta herramienta nos facilita la creación de histogramas, gráficos, mapas y demás formas gráficas de representación de los datos.
