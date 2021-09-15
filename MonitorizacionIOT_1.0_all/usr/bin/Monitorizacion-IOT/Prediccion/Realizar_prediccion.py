@@ -10,6 +10,7 @@ from Modelo import *
 
 from Utilidades.Extractor import *
 from Utilidades.Campos import *
+from Persistencia_modelo import *
 
 if __name__ == "__main__":
 
@@ -23,19 +24,8 @@ if __name__ == "__main__":
         nombreModelo = modelos[0]
 
         try:
-            tipoModelo = re.sub("model","",nombreModelo).split("_")[0]
 
-            if(tipoModelo == "Detretor"):
-                model = Persistencia_modelo.cargar(PATH + "/modelos/" + nombreModelo)
-                modelo = Modelo_Detrender(idSensor)
-                modelo.cargar(model)
-            if(tipoModelo == "SNARIMAX"):
-
-                model = Persistencia_modelo.cargar(PATH + "/modelos/" + nombreModelo)
-                modelo = Modelo_SNARIMAX(idSensor)
-                modelo.cargar(model)
-
-
+            modelo = Persistencia_modelo.cargar(nombreModelo)
             datosPredichos = modelo.predecir(fecha_inicial, horizonte)
 
         except Exception as e:
@@ -54,3 +44,4 @@ if __name__ == "__main__":
 
     elif(len(modelos) == 0):
         print("No hay ningún modelo para el sensor " + str(idSensor))
+

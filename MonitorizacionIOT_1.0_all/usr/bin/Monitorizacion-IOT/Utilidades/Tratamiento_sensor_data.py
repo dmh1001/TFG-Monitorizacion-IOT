@@ -1,12 +1,9 @@
 import json
 from .Generador_lineas import *
 
-'''
-Clase que transforma ficheros obtenidos desde PRTG
-'''
-class Transformador_sensor_data:
+class Tratamiento_sensor_data:
 
-    def transformarJSON(fichero, idSensor):
+    def transformarJSON(self, fichero, idSensor):
         linea = []
         for line in fichero['histdata']:
             if(line['Valor'] != ''):
@@ -20,3 +17,9 @@ class Transformador_sensor_data:
                 linea.append(Generador_lineas.generar_linea(idSensor,date,line))
 
         return linea
+
+
+    def leerJSON(self, ruta):
+        with open(ruta,"rb") as file:
+            data = json.load(file)
+            return data

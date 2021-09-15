@@ -10,9 +10,10 @@ from Modelo import *
 
 from Utilidades.Extractor import *
 from Utilidades.Campos import *
+from Persistencia_modelo import *
+
 
 if __name__ == "__main__":
-
     idSensor = sys.argv[1]
     fecha_inicio = sys.argv[2]
     fecha_final = sys.argv[3]
@@ -23,18 +24,8 @@ if __name__ == "__main__":
         nombreModelo = modelos[0]
 
         try:
-            tipoModelo = re.sub("model","",nombreModelo).split("_")[0]
 
-            if(tipoModelo == "Detretor"):
-                model = Persistencia_modelo.cargar(PATH + "/modelos/" + nombreModelo)
-                modelo = Modelo_Detrender(idSensor)
-                modelo.cargar(model)
-
-            if(tipoModelo == "SNARIMAX"):
-
-                model = Persistencia_modelo.cargar(PATH + "/modelos/" + nombreModelo)
-                modelo = Modelo_SNARIMAX(idSensor)
-                modelo.cargar(model)
+            modelo = Persistencia_modelo.cargar(nombreModelo)
 
             datos = Extractor.extraer_data(idSensor, fecha_inicio, fecha_final, Campos.VALOR)
 
@@ -51,10 +42,12 @@ if __name__ == "__main__":
                     file.write(pred + "\n")
 
         except Exception as e:
-            print("Se ha producido un error "+str(e))
-            
+            print("Se ha producido un error: " + str(e) + " \n")
+
+
     elif(len(modelos) > 1):
-        print("hay mas de un modelo para el sensor " + str(idSensor))
+        print("hay mas de un modelo para el sensor " + str(idSensor) + "\n")
 
     elif(len(modelos) == 0):
-        print("No hay ningún modelo para el sensor " + str(idSensor))
+        print("No hay ningún modelo para el sensor " + str(idSensor)+ "\n")
+

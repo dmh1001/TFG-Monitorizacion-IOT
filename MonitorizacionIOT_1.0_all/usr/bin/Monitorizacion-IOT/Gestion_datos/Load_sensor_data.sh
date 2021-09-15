@@ -1,3 +1,5 @@
+#!/bin/bash
+
 IFS=$'\n'
 for LINE in $(cat $1)
 do

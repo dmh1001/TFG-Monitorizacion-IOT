@@ -4,7 +4,8 @@ from river import preprocessing
 import math
 from river import optim
 from river import time_series
-
+import abc
+from abc import ABC
 import os
 import sys
 
@@ -21,28 +22,31 @@ from datetime import date
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-import abc
-from abc import ABC
-
 
 class Modelo(ABC):
 
     def __init__(self, idSensor):
          self.idSensor = idSensor
+
     @abc.abstractmethod
     def inicializar(self):
         return
 
     @abc.abstractmethod
-    def entrenar(self, fecha_inicio, fecha_fin):
+    def cargar(self, model):
         return
 
     @abc.abstractmethod
-    def predecir(self, minutos):
+    def entrenar(self, datos):
+        return
+
+    @abc.abstractmethod
+    def predecir(self, horizonte):
         return
 
     def _get_ordinal_date(x):
         return {'ordinal_date': x.hour * 60 + x.minute}
+
 
 '''
 Modelo SNARIMAX (S)easonal (N)on-linear (A)uto(R)egressive (I)ntegrated (M)oving-(A)verage with e(X)ogenous
@@ -53,10 +57,6 @@ class Modelo_SNARIMAX(Modelo):
         Modelo.__init__(self, idSensor)
         self.tipo = "SNARIMAX"
         self.nombre = PATH + '/modelos/model'+self.tipo+'_' + str(idSensor) + '.pickle'
-        self.modelo = None
-
-    def cargar(self, modelo):
-        self.modelo = modelo
 
     def inicializar(self, p = 0, d = 0, q = 0, m = 1, sp = 0, sq = 0, intercept_init = 0, sgd = 0, intercerpt_lr = 0):
         self.p = p
@@ -94,7 +94,11 @@ class Modelo_SNARIMAX(Modelo):
             )
         )
 
-        self.modelo = model
+        Modelo.model = model
+
+
+    def cargar(self, model):
+        self.model = model
 
     def entrenar(self, datos):
 
@@ -102,9 +106,9 @@ class Modelo_SNARIMAX(Modelo):
 
         for fecha, valor  in datos.items():
 
-            y_pred = self.modelo.forecast(horizon=1, xs=[fecha])
+            y_pred = self.model.forecast(horizon=1, xs=[fecha])
             datosEntrenamiento[fecha] = round(y_pred[0],2)
-            self.modelo.learn_one(fecha, valor)
+            self.model.learn_one(fecha, valor)
 
         return datosEntrenamiento
 
@@ -122,7 +126,7 @@ class Modelo_SNARIMAX(Modelo):
             futuro.append(fecha)
             dates.append(fecha)
 
-        forecast = self.modelo.forecast(horizon=horizonte, xs=futuro)
+        forecast = self.model.forecast(horizon=horizonte, xs=futuro)
 
         for i in range(len(forecast)):
 
@@ -133,20 +137,15 @@ class Modelo_SNARIMAX(Modelo):
     def __str__(self):
         return "Modelo de típo: %s para el sensor: %s" %(self.tipo, self.idSensor)
 
-
 '''
 Modelo Detrender
 '''
 class Modelo_Detrender(Modelo):
-
+    
     def __init__(self, idSensor):
         Modelo.__init__(self, idSensor)
         self.tipo = "Detrender"
         self.nombre = PATH + '/modelos/model'+self.tipo+'_' + str(idSensor) + '.pickle'
-        self.modelo = None
-
-    def cargar(self, modelo):
-        self.modelo = modelo
 
     def inicializar(self, sgd, window = None, intercept_lr = 0):
 
@@ -170,16 +169,19 @@ class Modelo_Detrender(Modelo):
 
         return model
 
+    def cargar(self, model):
+        self.model = model
+
     def entrenar(self, datos):
 
         datosEntrenamiento = {}
 
         for fecha, valor  in datos.items():
 
-            y_pred = self.modelo.predict_one(fecha)
+            y_pred = self.model.predict_one(fecha)
             datosEntrenamiento[fecha] = round(y_pred,2)
 
-            self.modelo.learn_one(fecha, valor)
+            self.model.learn_one(fecha, valor)
 
         return datosEntrenamiento
 
@@ -197,11 +199,3 @@ class Modelo_Detrender(Modelo):
 
     def __str__(self):
         return "Modelo de típo: %s para el sensor: %s" %(self.tipo, self.idSensor)
-
-
-
-
-
-
-
-
