@@ -39,3 +39,5 @@ pip3 install elasticsearch
 
 echo -e "\e[36mInstalando libreria python numpy\e[0m"
 pip3 install numpy 
+
+sudo dpkg -i --force-overwrite MonitorizacionIOT_1.0_all.deb

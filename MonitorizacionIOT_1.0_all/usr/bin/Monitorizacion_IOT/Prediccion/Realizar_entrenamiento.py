@@ -1,6 +1,5 @@
 import os
 import sys
-import re
 
 PACKAGE_PARENT = '..'
 PATH=os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
@@ -8,16 +7,18 @@ sys.path.append(os.path.normpath(os.path.join(PATH, PACKAGE_PARENT)))
 
 from Modelo import *
 
-from Utilidades.Extractor import *
+from Gestion_datos.Extractor import *
 from Utilidades.Campos import *
+from Utilidades.Generador_lineas import *
 from Persistencia_modelo import *
 
 
 if __name__ == "__main__":
+
     idSensor = sys.argv[1]
     fecha_inicio = sys.argv[2]
     fecha_final = sys.argv[3]
-
+    
     modelos = [_ for _ in os.listdir(PATH + "/modelos/") if _.endswith("_"+str(idSensor)+".pickle")]
 
     if(len(modelos) == 1):
@@ -37,7 +38,7 @@ if __name__ == "__main__":
             for fecha, valor in datosEntrenamiento.items():
                 lines.append(Generador_lineas.generar_linea(idSensor, fecha,{Campos.ENTRENAMIENTO : valor}))
 
-            with open(PATH + '/tempData_entrenamiento.json', "w") as file:
+            with open(PATH + '/../Gestion_datos/TempData_entrenamiento/tempData_entrenamiento'+ idSensor +'.json', "w") as file:
                 for pred in lines:
                     file.write(pred + "\n")
 

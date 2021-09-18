@@ -6,3 +6,4 @@ Priority: optional
 Depends: python3 (>=3.5), openjdk-11-jre-headless, elasticsearch, kibana, logstash, apt-transport-https
 Maintainer: Daniel Mellado Hurtado <dmh1001@alu.ubu.es>
 Description: Programa que conecta PRTG con ElasticSearch para almacenar datos de sensores y realizar una predicción de los mismos.
+

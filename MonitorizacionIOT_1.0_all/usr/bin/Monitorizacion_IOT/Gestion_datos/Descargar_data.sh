@@ -6,8 +6,10 @@ IP_PRTG=$3
 
 id_sensor=$4
 
+
 fecha_inicio=$5
 fecha_fin=$6
+
 
 path="/usr/bin/Monitorizacion_IOT/Gestion_datos"
 
@@ -18,7 +20,6 @@ path="/usr/bin/Monitorizacion_IOT/Gestion_datos"
 # $3 : fecha fin
 # $4 : volcado datos
 function descarga_datos_PRTG(){
-
 
         curl -o "$4" $IP_PRTG'/api/historicdata.json?id='$1'&avg=0&usecaption=1&sdate='$2'&edate='$3'&username='$usuario_PRTG'&passhash='$passhash_PRTG
 }
@@ -44,27 +45,26 @@ function comparar_ficheros(){
         grep -xvf $1 $2 > $path/load/load"$3".json
 }
 
-if [ -f $path/tempData_sensores/tempData"$id_sensor".json ]
+
+
+if [ -f $path/TempData_sensores/tempData"$id_sensor".json ]
 then
 
         descarga_datos_PRTG "$id_sensor" "$fecha_inicio" "$fecha_fin" $path/logs/historic"$id_sensor"_2.json
 
-        python3 $path/../Utilidades/Transformar_data.py $id_sensor /$path/logs/historic"$id_sensor"_2.json $path/tempData_sensores/tempData"$id_sensor"_2.json
+        python3 $path/../Utilidades/Transformar_data.py $id_sensor /$path/logs/historic"$id_sensor"_2.json $path/TempData_sensores/tempData"$id_sensor"_2.json
 
-        comparar_ficheros $path/tempData_sensores/tempData"$id_sensor".json $path/tempData_sensores/tempData"$id_sensor"_2.json "$id_sensor"
+        comparar_ficheros $path/TempData_sensores/tempData"$id_sensor".json $path/TempData_sensores/tempData"$id_sensor"_2.json "$id_sensor"
 
         bash $path/Load_sensor_data.sh $path/load/load"$id_sensor".json
 
-        cat $path/tempData_sensores/tempData"$id_sensor"_2.json > $path/tempData_sensores/tempData"$id_sensor".json
+        cat $path/TempData_sensores/tempData"$id_sensor"_2.json > $path/TempData_sensores/tempData"$id_sensor".json
         rm $path/logs/historic"$id_sensor"_2.json
 
 else
-        descarga_datos_PRTG "$id_sensor" "$fecha_Inicio" "$fecha_Fin" $path/logs/historic"$id_sensor".json
-
-        python3 $path/../Utilidades/Transformar_data.py "$id_sensor" /$path/logs/historic"$id_sensor".json $path/tempData_sensores/tempData"$id_sensor".json
-
-        bash $path/Load_sensor_data.sh $path/tempData_sensores/tempData"$id_sensor".json
-
-        rm $path/logs/historic"$id_sensor".json
+	
+        descarga_datos_PRTG "$id_sensor" "$fecha_inicio" "$fecha_fin" $path/logs/historic"$id_sensor".json
+       	python3 $path/../Utilidades/Transformar_data.py "$id_sensor" /$path/logs/historic"$id_sensor".json $path/TempData_sensores/tempData"$id_sensor".json
+       	bash $path/Load_sensor_data.sh $path/TempData_sensores/tempData"$id_sensor".json
 
 fi

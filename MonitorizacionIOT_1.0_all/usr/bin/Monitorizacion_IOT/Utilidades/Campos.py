@@ -4,5 +4,3 @@ class Campos(str, Enum):
     VALOR = "Valor"
     PREDICCION = "Prediccion"
     ENTRENAMIENTO = "Entrenamiento"
-
-

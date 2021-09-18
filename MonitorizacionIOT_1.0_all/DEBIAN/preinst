@@ -1,5 +1,11 @@
 #!/bin/bash
 
-rm /etc/kibana/kibana.yml
-rm /etc/elasticsearch/elasticsearch.yml
+if [ -f /etc/kibana/kibana.yml ]
+then
+	rm /etc/kibana/kibana.yml
+fi
 
+if [ -f /etc/elasticsearch/elasticsearch.yml ]
+then
+	rm /etc/elasticsearch/elasticsearch.yml
+fi

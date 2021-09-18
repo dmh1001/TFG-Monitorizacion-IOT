@@ -86,3 +86,4 @@ cluster.initial_master_nodes: ${HOSTNAME}
 # Require explicit names when deleting indices:
 #
 #action.destructive_requires_name: true
+

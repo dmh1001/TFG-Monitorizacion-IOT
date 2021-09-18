@@ -1,22 +1,21 @@
 from datetime import datetime
 from elasticsearch import Elasticsearch
 
-'''
-Clase que descarga datos desde la base de datos de elasticsearch
-'''
+
 class Extractor:
 
     def extraer_data(idSensor, fecha_inicio, fecha_final, campo):
 
-        elastic_client = Elasticsearch()
 
+        elastic_client = Elasticsearch()
+        
         result = elastic_client.search(
-            index='sensor_data-*',
+            index='sensor_data-*', 
                     body=
                 {
-                    "sort" :
+                    "sort" : 
                     {
-                      "datetime": {"order" : "asc"}
+                      "datetime": {"order" : "asc"}  
                     },
                        "query":
                         {
@@ -28,7 +27,7 @@ class Extractor:
                                         "field":campo.value
                                     }
                                 },
-
+                            
                                 "must":
                                 [
                                     {
@@ -37,11 +36,11 @@ class Extractor:
                                             "sensorId":idSensor
                                         }
                                     },
-                                    {
-                                        "range":
+                                    { 
+                                        "range": 
                                         {
-                                             "datetime" :
-                                              {
+                                             "datetime" : 
+                                              { 
                                                "gt" : fecha_inicio,
                                                "lte" : fecha_final
                                               }
@@ -57,21 +56,20 @@ class Extractor:
 
 
         for num, doc in enumerate(elastic_docs):
-
+            
             try:
-
+                           
                 value = doc["_source"][campo]
-
+                
                 dateId = datetime.strptime(doc["_source"]["datetime"], '%d/%m/%Y %H:%M:%S')
                 dateId = dateId.strftime('%Y-%m-%d %H:%M:00')
                 dateId = datetime.strptime(dateId, '%Y-%m-%d %H:%M:00')
 
                 data[dateId] = value
-
+ 
             except:
                     pass
-
-
+            
+  
         return data
-
 

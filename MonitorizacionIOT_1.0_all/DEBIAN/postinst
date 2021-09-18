@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 echo -e "\e[36mIniciando procesos\e[0m"
 
 systemctl daemon-reload && systemctl enable elasticsearch.service

@@ -4,8 +4,7 @@ from river import preprocessing
 import math
 from river import optim
 from river import time_series
-import abc
-from abc import ABC
+
 import os
 import sys
 
@@ -13,15 +12,12 @@ PACKAGE_PARENT = '..'
 PATH=os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
 sys.path.append(os.path.normpath(os.path.join(PATH, PACKAGE_PARENT)))
 
-from Utilidades.Extractor import *
-from Utilidades.Campos import *
-from Persistencia_modelo import *
-from Utilidades.Generador_lineas import *
-
 from datetime import date
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
+import abc
+from abc import ABC
 
 class Modelo(ABC):
 
@@ -46,11 +42,8 @@ class Modelo(ABC):
 
     def _get_ordinal_date(x):
         return {'ordinal_date': x.hour * 60 + x.minute}
+    
 
-
-'''
-Modelo SNARIMAX (S)easonal (N)on-linear (A)uto(R)egressive (I)ntegrated (M)oving-(A)verage with e(X)ogenous
-'''
 class Modelo_SNARIMAX(Modelo):
 
     def __init__(self, idSensor):
@@ -58,7 +51,7 @@ class Modelo_SNARIMAX(Modelo):
         self.tipo = "SNARIMAX"
         self.nombre = PATH + '/modelos/model'+self.tipo+'_' + str(idSensor) + '.pickle'
 
-    def inicializar(self, p = 0, d = 0, q = 0, m = 1, sp = 0, sq = 0, intercept_init = 0, sgd = 0, intercerpt_lr = 0):
+    def inicializar(self, p = 0, d = 0, q = 0, m = 1, sp = 0, sq = 0, intercept_init = 0, sgd = 0, intercerpt_lr = 0):        
         self.p = p
         self.d = d
         self.q = q
@@ -95,19 +88,18 @@ class Modelo_SNARIMAX(Modelo):
         )
 
         Modelo.model = model
-
-
+    
     def cargar(self, model):
         self.model = model
 
     def entrenar(self, datos):
 
         datosEntrenamiento = {}
-
+         
         for fecha, valor  in datos.items():
-
+                 
             y_pred = self.model.forecast(horizon=1, xs=[fecha])
-            datosEntrenamiento[fecha] = round(y_pred[0],2)
+            datosEntrenamiento[fecha] = round(y_pred[0],2)    
             self.model.learn_one(fecha, valor)
 
         return datosEntrenamiento
@@ -117,7 +109,7 @@ class Modelo_SNARIMAX(Modelo):
         datosPredichos = {}
         futuro = []
         dates = []
-
+        
         fecha = fecha_inicial
 
         for dia in range(0, horizonte):
@@ -125,23 +117,20 @@ class Modelo_SNARIMAX(Modelo):
             fecha = fecha + relativedelta(minutes=1)
             futuro.append(fecha)
             dates.append(fecha)
-
+    
         forecast = self.model.forecast(horizon=horizonte, xs=futuro)
-
+        
         for i in range(len(forecast)):
-
+        
             datosPredichos[dates[i]] = round(forecast[i],2)
-
+            
         return datosPredichos
-
+    
     def __str__(self):
         return "Modelo de típo: %s para el sensor: %s" %(self.tipo, self.idSensor)
 
-'''
-Modelo Detrender
-'''
 class Modelo_Detrender(Modelo):
-    
+
     def __init__(self, idSensor):
         Modelo.__init__(self, idSensor)
         self.tipo = "Detrender"
@@ -191,11 +180,14 @@ class Modelo_Detrender(Modelo):
 
         fecha = fecha_inicial
         for dia in range(0, horizonte):
-            fecha = fecha + relativedelta(minutes=1)
+            fecha = fecha + relativedelta(minutes=1) 
             pred = self.model.predict_one(fecha)
             datosPredichos[fecha] = pred
 
         return datosPredichos
-
+    
     def __str__(self):
         return "Modelo de típo: %s para el sensor: %s" %(self.tipo, self.idSensor)
+
+
+

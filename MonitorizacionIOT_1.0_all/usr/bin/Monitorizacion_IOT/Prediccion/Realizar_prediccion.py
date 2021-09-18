@@ -8,8 +8,8 @@ sys.path.append(os.path.normpath(os.path.join(PATH, PACKAGE_PARENT)))
 
 from Modelo import *
 
-from Utilidades.Extractor import *
 from Utilidades.Campos import *
+from Utilidades.Generador_lineas import *
 from Persistencia_modelo import *
 
 if __name__ == "__main__":
@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
         try:
 
-            modelo = Persistencia_modelo.cargar(nombreModelo)
+            modelo = Persistencia_modelo.cargar(nombreModelo)            
             datosPredichos = modelo.predecir(fecha_inicial, horizonte)
 
         except Exception as e:
@@ -36,9 +36,10 @@ if __name__ == "__main__":
         for fecha, valor in datosPredichos.items():
             lines.append(Generador_lineas.generar_linea(idSensor, fecha,{Campos.PREDICCION : valor}))
 
-        with open(PATH + '/tempData_prediccion.json', "w") as file:
+        with open(PATH + '/../Gestion_datos/TempData_prediccion/tempData_prediccion'+idSensor+'.json', "w") as file:
             for pred in lines:
                 file.write(pred + "\n")
+
     elif(len(modelos) > 1):
         print("hay mas de un modelo para el sensor " + str(idSensor))
 
