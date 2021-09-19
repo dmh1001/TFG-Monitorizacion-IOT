@@ -89,7 +89,7 @@ output{
 }
  \end{verbatim}
  
-Para que logstash mande la información a Elasticsearch hay que sustituir donde pone ``IP\_Ubuntu\_server'' por la IP de Ubuntu server, en el cual se ha instalado Elasticsearch.
+Para que logstash mande la información a Elasticsearch hay que sustituir donde pone ``IP\_Ubuntu\_server'' por la IP de Ubuntu Server, en el cual se ha instalado Elasticsearch.
 
 \subsubsection{Índice}
 
@@ -151,7 +151,7 @@ POST _template/sensor_data_template
 \end{figure}
 \newpage
 
-Una vez creado el índice todos los datos procedentes de losgstash se almacenarán con ese índice.
+Una vez creado el índice todos los datos procedentes de Logstash se almacenarán con ese índice.
 Dentro del menú \textit{Stack Management} en el apartado \textit{index Managment} se puede consultar los datos que va recibiendo \ref{img_index_manager.png}.
 
 \begin{figure}[h]
@@ -218,11 +218,11 @@ systemctl stop Monitorizacion_IOT
 
 \subsection{Index pattern}
 
-Por último, para poder explorar y visualizar los datos en Kibana es necesarios que exista un ``index pattern'' que diga a Elasticsearch que índices contienen los datos, así como especificar de que tipo son. \cite{pagina:elastic}
+Por último, para poder explorar y visualizar los datos en Kibana es necesarios que exista un \textit{index pattern} que diga a Elasticsearch que índices contienen los datos, así como especificar de que tipo son. \cite{pagina:elastic}
 
-Para poder crear un index pattern, primero Elasticsearch ha de tener datos \ref{img_index_pattern_antes_de_datos.png}, es por ello que este es el último paso a realizar.
+Para poder crear un \textit{index pattern}, primero Elasticsearch ha de tener datos \ref{img_index_pattern_antes_de_datos.png}, es por ello que este es el último paso a realizar.
 
-Una vez se disponga de datos se podrá crear un index pattern \ref{img_index_patter_menu.png}
+Una vez se disponga de datos se podrá crear un \textit{index pattern} \ref{img_index_patter_menu.png}
 
 En este caso se ha de crear un patrón para que albergue todos los datos procedentes de sensores ``sensor\_data-*'' \ref{img_create_index_pattern.png}
 
@@ -272,7 +272,7 @@ Para poder trabajar con los datos de los sensores, provenientes de PRTG es neces
 
 \nombrePrograma, mediante un script, descarga los datos de los sensores que se encuentran en la lista \textbf{lista\_id\_sensor}, estos se guardan en un fichero JSON, el cual se ha de transformar para adecuar el formato y que Elasticsearch pueda procesarlo. Para almacenar los datos ya obtenidos y transformados a la base de datos de Elasticsearch, estos ficheros son preprocesados por logstash que se encarga de enviar las líneas de datos al servidor de Elastic e indexarlos correctamente.
 
-Los datos son subidos con el siguiente nombre: ``sensor\_data-yyyy.mm.dd'' de tal forma que todos los datos que se suben en un día se almacenan bajo un mismo índice. Para poder explorar y visualizar los datos en Kibana es necesarios que exista un ``index pattern'' que diga a Elasticsearch que índices contienen los datos, así como especificar de que tipo son, en este caso se ha creado uno para que albergue todos los datos procedentes de sensores ``sensor\_data-*''. 
+Los datos son subidos con el siguiente nombre: ``sensor\_data-yyyy.mm.dd'' de tal forma que todos los datos que se suben en un día se almacenan bajo un mismo índice. Para poder explorar y visualizar los datos en Kibana es necesarios que exista un \textit{index pattern} que diga a Elasticsearch que índices contienen los datos, así como especificar de que tipo son, en este caso se ha creado uno para que albergue todos los datos procedentes de sensores ``sensor\_data-*''. 
 
 Una vez los datos estén correctamente almacenados e indexados en Elasticsearch, se puede explorar y visualizar los datos con Kibana.
 
@@ -405,7 +405,7 @@ Mediante un navegador introducimos la siguiente url: IP\_ubuntu\_server:5601 (el
 	\label{img_kibana_home}
 \end{figure}
 
-Una vez en el apartado home podemos acceder al apartado ``kibana Visualize \& analyze'' para poder echar un vistazo a nuestros datos. Para ver nuestros datos, así como realizar filtrados y búsquedas accederemos a ``Discover''
+Una vez en el apartado home podemos acceder al apartado \textit{kibana Visualize \& analyze} para poder echar un vistazo a nuestros datos. Para ver nuestros datos, así como realizar filtrados y búsquedas accederemos a \textit{Discover}
 
 Se pueden visualizar los datos que estén vinculados a un patrón de índices.
 
@@ -416,7 +416,7 @@ Se pueden visualizar los datos que estén vinculados a un patrón de índices.
 	\label{img_kibana_discover}
 \end{figure}
 
-Para visualizar de forma gráfica los datos se ha de acceder al apartado ``Dashboard'' en él se puede crear cualquier tipo de gráfico.
+Para visualizar de forma gráfica los datos se ha de acceder al apartado \textit{Dashboard} en él se puede crear cualquier tipo de gráfico.
 
 \begin{figure}[h]
 	\centering
@@ -428,7 +428,7 @@ Para visualizar de forma gráfica los datos se ha de acceder al apartado ``Dashb
 
 \subsection{Búsquedas y filtrados de datos}
 
-kibana provee varias formas de construir queries con las cuales poder hacer filtrados y búsquedas en los datos almacenados en Elasticsearch.
+Kibana provee varias formas de construir \textit{queries} con las cuales poder hacer filtrados y búsquedas en los datos almacenados en Elasticsearch.
 
 En el apartado \textit{Discover} se muestran los datos de un índice, se pueden realizar una serie de filtrados y búsquedas, el filtrado de tiempo limita los datos mostrados en un rango de fechas, este filtrado, normalmente, se aplica al campo de tiempo del \textit{intex pattern}
 

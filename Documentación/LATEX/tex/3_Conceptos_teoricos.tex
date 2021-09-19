@@ -34,25 +34,25 @@ Las bombas de agua son máquinas hidráulicas que utilizan energía para mover e
 
 \section{Big Data}
 
-El Big Data está formado por conjuntos complejos de datos de un elevado tamaño y con una gran velocidad de crecimiento. Estos conjuntos de datos tienen tal volumen que es imposible de almacenarlos, gestionarlos, procesarlos y/o analizarlos con software de procesamiento de datos convencionales.
+El \textit{Big Data} está formado por conjuntos complejos de datos de un elevado tamaño y con una gran velocidad de crecimiento. Estos conjuntos de datos tienen tal volumen que es imposible de almacenarlos, gestionarlos, procesarlos y/o analizarlos con software de procesamiento de datos convencionales.
 
 Pese a su dificultad, estos volúmenes tan masivos son de gran utilidad para abordad problemas de todo tipo que no habrían sido posibles de solucionar antes. \cite{pagina:Oracle_big_data}
 
 \section{Anomalías}
 
-En Big Data las anomalías son datos que no siguen el patrón natural de la mayoría de los datos, esto puede ser síntoma de algún tipo de fallo o de algún evento no esperado. 
+En \textit{Big Data} las anomalías son datos que no siguen el patrón natural de la mayoría de los datos, esto puede ser síntoma de algún tipo de fallo o de algún evento no esperado. 
 
-Para detectar estas anomalías o comportamientos atípicos es necesario distinguir en un conjunto de datos cuales son anomalías. Esta puede ser una tarea extremadamente difícil en conjuntos de gran tamaño como se da en Big Data, para ello es necesario la incorporación de modelos de machine learning que identifiquen estas anomalías.\cite{pagina:anomalias}
+Para detectar estas anomalías o comportamientos atípicos es necesario distinguir en un conjunto de datos cuales son anomalías. Esta puede ser una tarea extremadamente difícil en conjuntos de gran tamaño como se da en \textit{Big Data}, para ello es necesario la incorporación de modelos de machine learning que identifiquen estas anomalías.\cite{pagina:anomalias}
 
 
 \section{Time series}
-Time series o serie temporal es una sucesión de datos ordenados de forma cronológica. Estos datos pueden estar separados tanto por intervalos iguales de tiempo o desiguales
+\textit{Time series} o serie temporal es una sucesión de datos ordenados de forma cronológica. Estos datos pueden estar separados tanto por intervalos iguales de tiempo o desiguales
 
-Uno de los usos de time series es el de análisis de predicciones. A la hora de realizar predicciones el tiempo es normalmente la variable independiente y el objetivo es realizar predicciones a futuro \cite{pagina:toward_data_scince}
+Uno de los usos de time series es el de análisis de predicciones. A la hora de realizar predicciones el tiempo es normalmente la variable independiente y el objetivo es realizar predicciones a futuro. \cite{pagina:toward_data_scince}
 
 \section{Data stream}
 
-Los data stream son datos que se generan de forma continua y de diversas fuentes. Estos datos suelen ser utilizados para análisis de datos y son procesados de manera secuencial y gradual.
+Los \textit{data stream} son datos que se generan de forma continua y de diversas fuentes. Estos datos suelen ser utilizados para análisis de datos y son procesados de manera secuencial y gradual.
 
 Los datos que se generan pueden ser de cualquier tipo, en el caso de este proyecto los datos generados so de tipo time series.\cite{pagina:AWS_dataStream}
 
@@ -67,7 +67,7 @@ Actualmente la inteligencia artificial se aplica a cualquier campo, pudiendo rea
 
 \subsection{Machine learning}
 
-Machine learning es una rama derivada de la inteligencia artificial que se centra en el uso de datos y algoritmos para imitar el aprendizaje humano. \cite{pagina:IBM_Machine_learning}
+\textit{Machine learning} es una rama derivada de la inteligencia artificial que se centra en el uso de datos y algoritmos para imitar el aprendizaje humano. \cite{pagina:IBM_Machine_learning}
 
 Se puede dividir los algoritmos de machine learning en tres partes:
 
@@ -75,7 +75,7 @@ Se puede dividir los algoritmos de machine learning en tres partes:
     \item \textbf{Proceso de decisión}: por lo general los algoritmos de machine learning se utilizan para problemas de predicción o clasificación con la ayuda de datos (los cuales pueden estar etiquetados o no) el algoritmo será capaz de estimar patrones en los datos proporcionados.
     \item \textbf{Función de error}: una función de error que sirva para evaluar las predicciones del modelo y medir la precisión del mismo.
     
-    \item \textbf{Proceso de optimización del modelo}: si el modelo puede mejorar la precisión con los datos de entrenamiento entonces se ajustan los pesos. El algoritmo repitiera este proceso hasta que se haya llegado al umbral de precisión.
+    \item \textbf{Proceso de optimización del modelo}: si el modelo puede mejorar la precisión con los datos de entrenamiento, entonces se ajustan los pesos. El algoritmo repitiera este proceso hasta que se haya llegado al umbral de precisión.
 
 \end{itemize}
 
@@ -102,14 +102,14 @@ Existen una gran cantidad de bases de datos NoSQL: clave-valor, Documentos, Grá
 
 \subsection{Documentos}
 
-En este tipo de bases de datos, los datos se representan como un objeto o documento, este puede ser de distintos tipo cómo JSON, XML, YAML o BSON.\cite{pagina:AWS_NoSQL}
+En este tipo de bases de datos, los datos se representan como un objeto o documento, este puede ser de distintos tipos cómo JSON, XML, YAML o BSON.\cite{pagina:AWS_NoSQL}
 
 Los documentos no requieren que se ajusten a ningún esquema o estructura específica.
 
 \section{Daemons}
 
 En informática, un daemon es un programa que se ejecuta cómo un proceso en segundo plano.
-En Linux los daemons son administrados por \textit{systemd} y se administran mediante el comando \textit{systemctl}. Estos leen los archivos con el nombre \textit{nombre.Service} que contiene información sobre cómo se ha de inicializar. Estos archivos se almacenan en \textit{/\{etc,usr/lib,run\}/systemd/system}\cite{pagina:daemons_linux}
+En Linux los daemons son administrados por \textit{systemd} y se administran mediante el comando \textit{systemctl}. Estos leen los archivos con el nombre \textit{nombre.Service} que contiene información sobre cómo se ha de inicializar. Estos archivos se almacenan en: \textit{/\{etc,usr/lib,run\}/systemd/system}\cite{pagina:daemons_linux}
 
 
 \section{Curl}

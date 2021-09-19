@@ -1,31 +1,5 @@
 \capitulo{4}{Técnicas y herramientas}
-\begin{comment}
-\section{Stream Processing Framework}
 
-Stream processing es una tecnología que procesa los datos de forma continua y secuencial, para realizar esta tarea se utilizan flujos de datos infinitos y sin límites de tiempo. Son extremadamente útiles a la hora de monitorizar sistemas, redes, aplicaciones, dispositivos, etc... 
-
-algunas de las alternativas más populares que he considerado son las siguientes:
-
-\subsection{Apache Kafka}
-
-Apache Kafka es un sistema de intermediación de mensajes que responde al patrón "Publish/Subscribe Messaging" que se utiliza para la comunicación entre aplicaciones. Entre sus principales características se encuentran que es un sistema escalable y persistente, con gran tolerancia a fallos y gran velocidad tanto de escritura cómo de lectura.
-
-Para transmitir estos datos Kafka crea \textit{Topics}, flujos de datos que a su vez se dividen en particiones, cada mensaje se almacena en una de estas particiones.
-
-Debido a su popularidad es una herramienta bien documentada \cite{documentacion:kafka} tanto por la propia compañía cómo los usuarios. \cite{pagina:kafka}
-
-\subsection{Apache Airflow}
-Apache Airflow es una plataforma open-source que nos permite automatizar tareas con la ayuda de scripts y mediante el uso de un planificador para llevar a cabo numerosas tareas. Permite la utilización de DAGs (Grafo acíclico dirigido) y crear pipelines dinámicos, mediante Python. 
-
-Apache Airflow tiene una curva de aprendizaje elevada y puede resultar complicado para los usuarios\cite{pagina:HEVO}
-
-\subsection{Apache Samza}
-Es un procesador de flujo a tiempo real, usa Apache Kafka para la mensajería y Apache Hadoop YARN para tolerancia a fallos, seguridad, independencia de procesos y gestión de recursos para su utilización es necesario Hadoop. Samza utiliza streams inmutables e implementa el procesamiento de flujo sin y con estado. \cite{pagina:Samza}
-
-\subsection{Apache Flume}
-
-Apache Flume es un servicio distribuido capaz de mover grandes cantidades de datos y logs, este forma parte del ecosistema de Hadoop. Su arquitectura es tanto flexible cómo sencilla. aunque presenta cierta dificultad a la hora de escalar. Está basado en flujo de datos en Streaming permitiendo múltiples flujos.\cite{pagina:Flume}
-\end{comment}
 \section{Visualización y análisis de datos}
 
 Para monitorizar nuestros datos debemos hacer uso de herramientas de Network monitoring que nos permita detectar fallos y anomalías en los datos así cómo alertarnos si alguno de los datos monitorizados pasa por debajo de un umbral.
@@ -36,13 +10,13 @@ PRTG Network Monitor es una herramienta de monitorización desarrollada por Paes
 
 \subsection{ThingSpeak}
 
-ThinkSpeak es una plataforma open source orientada al Internet de las Cosas (IOT) que permite recoger, almacenar datos de sensores en la nube usando el protocolo HTTP y visualizar los datos. También permite realizar análisis de los datos usando MATLAB. 
+ThinkSpeak es una plataforma \textit{open source} orientada al Internet de las Cosas (IOT) que permite recoger, almacenar datos de sensores en la nube usando el protocolo HTTP y visualizar los datos. También permite realizar análisis de los datos usando MATLAB. 
 
 ThingSpeak consta de aplicaciones complementarias con diversas funcionalidades. \cite{pagina:ThingSpeak}
 
 \subsection{Grafana}
 
-Grafana permite visualizar y representar métricas de datos sin importar donde estén almacenados, la visualización es rápida y flexible con multitud de opciones. En Grafana se pueden definir alertas sobre las métricas que se desee y manda notificaciones de estas, también cuenta con cientos de plugins oficiales. 
+Grafana permite visualizar y representar métricas de datos sin importar donde estén almacenados, la visualización es rápida y flexible con multitud de opciones. En Grafana se pueden definir alertas sobre las métricas que se desee y manda notificaciones de estas, también cuenta con cientos de \textit{plugins} oficiales. 
 
 Contiene una opción de pago en la que ellos proporcionan el servidor y otro completamente gratuita en la que permite ejecutarlo en cualquiera de los sistemas operativos principales.\cite{pagina:Grafana}
 
@@ -65,7 +39,7 @@ Elasticsearch es uno de los motores de búsqueda más valorados del mercado\cite
 Posee una arquitectura distribuida siendo la escalabilidad horizontal, una de sus ventajas es su rapidez a la hora de realizar búsquedas de textos complejos para facilitar esto funciona mediante índices invertidos.\cite{pagina:ElasticSearch}  
 
 \subsection{Solr}
-Apache Solr es un motor de búsqueda open source escrito en java con comandos escritos en HTTP y guarda los archivos utilizando XML. Esta optimizado para tráfico de altos volúmenes de datos y todo en tiempo real.\cite{pagina:Solr} 
+Apache Solr es un motor de búsqueda \textit{open source} escrito en java con comandos escritos en HTTP y guarda los archivos utilizando XML. Esta optimizado para tráfico de altos volúmenes de datos y todo en tiempo real.\cite{pagina:Solr} 
 
 \subsection{Elección final}
 
@@ -80,35 +54,35 @@ Para organizar el proyecto se ha elegido la plataforma de control de versiones d
 \section{Lenguajes de programación}
 
 \subsection{Python}
-Python es un lenguaje de programación multiplataforma y multiparagigma, soporta tanto programación orientación a objetos cómo programación imperativa. Es un lenguaje cuya sintaxis se centra en un código legible y sintaxis clara. \cite{pagina:Python_documentation}
+Python es un lenguaje de programación multiplataforma y multiparadígma, soporta tanto programación orientación a objetos cómo programación imperativa. Es un lenguaje cuya sintaxis se centra en un código legible y sintaxis clara. \cite{pagina:Python_documentation}
 
 \subsection{Bash}
 GNU Bash es una interfaz de usuario de línea de comandos y un lenguaje de programación de scripting, se creó originalmente para el sistema operativo GNU. Actualmente disponible en la mayoría de distribuciones GNU/Lunux, Mac OS X y también tiene versiones para Windows 10 y Android.
 
-\section{librerias Python}
+\section{Bibliotecas Python}
 
 \subsection{Scikit-learn}
 
-Scikit-learn es un módulo de programación en python para machine learning, permite realizar algoritmos de clasificación, regresión, Análisis de grupos, Máquinas de vectores de soporte, Árboles de decisión, etc...
+Scikit-learn es un módulo de programación en Python para machine learning, permite realizar algoritmos de clasificación, regresión, Análisis de grupos, Máquinas de vectores de soporte, Árboles de decisión, etc...
 
-Scikit-learn trabaja a su vez con otras librerías cómo NumPy, SciPy, pandas, SymPy, Matplotlib, Ip[y].\cite{pagina:scikit-learn}
+Scikit-learn trabaja a su vez con otras bibliotecas cómo NumPy, SciPy, Pandas, SymPy, Matplotlib, Ip[y].\cite{pagina:scikit-learn}
 
 \subsection{scikit-multiflow}
 
-Scikit-multiflow es una librería de machine learning para python dedicada a streaming data y multi-output learning que permite generar y evaluar data streams.\cite{skmultiflow}
+Scikit-multiflow es una biblioteca de machine learning para python dedicada a streaming data y multi-output learning que permite generar y evaluar data streams.\cite{skmultiflow}
 
 \subsection{NumPy}
-NumPy es una librería de Python especializada en el cálculo numérico y computación de datos. 
+NumPy es una biblioteca de Python especializada en el cálculo numérico y computación de datos. 
 
 \subsection{Pandas}
 
-Pandas es una librería open source de programación para Python y utilizando cómo extensión NumPy, se utiliza para análisis de datos, ofreciendo estructuras de datos y operaciones con tablas numéricas y series temporales.\cite{pagina:wiki_pandas}
+Pandas es una biblioteca NumPy \textit{open source} de programación para Python y utilizando cómo extensión NumPy, se utiliza para análisis de datos, ofreciendo estructuras de datos y operaciones con tablas numéricas y series temporales.\cite{pagina:wiki_pandas}
 
 
 \subsection{River}
-River es una librería de maching learning en streaming para python, juntando las librerías creme y sckit-multiflow.
+River es una biblioteca de \textit{maching learning} en streaming para python, juntando las bibliotecas Creme y Sckit-multiflow.
 
-Es una librería reciente por lo que la documentación no está completa y aún no hay muchos proyectos que hayan utilizado la librería.\cite{pagina:River}
+Es una biblioteca reciente por lo que la documentación no está completa y aún no hay muchos proyectos que hayan utilizado la biblioteca.\cite{pagina:River}
 
 \section{Archivos de texto}
 \subsection{JSON}
@@ -125,7 +99,7 @@ En este trabajo he decidido utilizar JSON para el intercambio de datos sobre otr
 Debido a que el cliente que va a facilitar los datos utiliza PRTG para monitorizar los sensores y este es exclusivo de Windows no se tiene más alternativa que utilizar este sistema operativo para albergar un servidor PRTG.
 
 \subsection{Ubuntu Server 20.04.2}
-Para albergar tanto Elasticsearch como el programa que conecte todos los sistemas se a escogido la última versión de ubuntu server debido a su ligera y por la facilidad que este tendría para implementarlo en un servidor real.
+Para albergar tanto Elasticsearch como el programa que conecte todos los sistemas se ha escogido la última versión de Ubuntu Server debido a su ligera y por la facilidad que este tendría para implementarlo en un servidor real.
 
 \section{IDEs}
 
@@ -146,15 +120,7 @@ En este proyecto se utiliza para documentar las pruebas realizas.\cite{pagina:Ju
 \section{Virtualización}
 
 \subsubsection{VirtualBox}
-Para albergar las máquinas virtuales se ha utilizado VirtualBox debido a ser la herramienta open source más famosa de virtualización.
-
-\begin{comment}
-
-\section{Procesadores de lenguaje}
-Herramientas consideradas: Flex, Bison, JavaCC
-
-Debido a la baja complejidad y el poco uso que le iba a dar a esta herramienta he decidido utilizar Flex, un analizador de lenguaje open source.
-\end{comment}
+Para albergar las máquinas virtuales se ha utilizado VirtualBox debido a ser la herramienta \textit{open source} más famosa de virtualización.
 
 \section{Comunicación}
 \subsection{Microsoft Teams}

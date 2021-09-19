@@ -173,7 +173,7 @@ Pseudocódigo del script \textit{Descargar\_data.sh}, el cual es referenciado en
 
 Para recuperar datos históricos, PRTG permite descargarlos en diversos formatos cómo pueden ser XML, CSV o JSON, en el caso de esta aplicación, debido a la facilidad que tiene Elasticsearch con formatos JSON se decidió obtener los datos en este formato. \cite{pagina:PRTG}
 
-Los párametros que se introducen a la llamada al comando Curl son:
+Los parámetros que se introducen a la llamada al comando Curl son:
 \begin{itemize}
     \item \textbf{id}: el id del sensor del que se quiere descargar los históricos.
     \item \textbf{avg}(average): se pone esta variable con valor a 0 para descargar los datos en bruto.
@@ -212,9 +212,9 @@ function descarga_datos_PRTG(){
 
 \subsection{Subida de datos a Elasticsearch}
     
-Para poder realizar la subida de datos a Elasticsearch de forma continua hay que configurar logstash, para ello se usa un plugin llamado Http input plugin. 
+Para poder realizar la subida de datos a Elasticsearch de forma continua hay que configurar logstash, para ello se usa un \textit{plugin} llamado Http input plugin. 
 
-Con este plugin una aplicación puede enviar una petición http y logstash lo procesará y enviará a Elasticsearch.\cite{pagina:Http_plugin_input}
+Con este \textit{plugin} una aplicación puede enviar una petición http y Logstash lo procesará y enviará a Elasticsearch.\cite{pagina:Http_plugin_input}
 
 \begin{verbatim}    
 
@@ -264,8 +264,6 @@ done
 \end{verbatim}  
 \caption{fichero /usr/bin/Monitorizacion\_IOT/Gestion\_datos/Load\_sensor\_data.sh}    
 
-
-    
 \section{Diseño arquitectónico}
 
 El proyecto consta de tres paquetes.
@@ -300,7 +298,7 @@ El proyecto consta de tres paquetes.
 	\label{img_diagrama_paquetes}
 \end{figure}
 
-Para facilitar el entendimiento de la topología tanto del hardware cómo del software se presenta el siguiente diagrama de despliegue \ref{img_diagrama_despliegue}. En el se pueden observar los dos sistemas: ubuntu server, albergando Elasticsearch y \nombrePrograma y Windows 10 cuya única función es albergar PRTG.
+Para facilitar el entendimiento de la topología tanto del hardware cómo del software se presenta el siguiente diagrama de despliegue \ref{img_diagrama_despliegue}. En él se pueden observar los dos sistemas: ubuntu server, albergando Elasticsearch y \nombrePrograma y Windows 10 cuya única función es albergar PRTG.
 
 \begin{figure}[h]
 	\centering
