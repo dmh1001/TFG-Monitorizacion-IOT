@@ -2,40 +2,66 @@
 
 En este apartado se desarrollarán los principales conceptos teóricos que facilitarán el entendimiento del trabajo.
 
-\subsection{El Internet de las Cosas (IOT)}
+\section{El Internet de las Cosas (IOT)}
+
 El Internet de las Cosas (en inglés \textit{Internet of things} IOT) es la red de objetos físicos que incorpora sensores, software y otras tecnologías con la finalidad de aportar datos a otros dispositivos a través de Internet.\cite{pagina:Oracle_IOT}
 
-En las últimas décadas se ha visto incrementada esta tecnología debida a la rápida evolución de internet con la aparición de servicios de almacenamiento de tipo nube y el avance en el hardware ha permitido que estos objetos recopilen datos con una intervención humana mínima.
+En las últimas décadas se ha visto incrementada esta tecnología debido a la rápida evolución de internet, la aparición de servicios de almacenamiento de tipo nube y el avance en el hardware que ha permitido que estos dispositivos recopilen datos con una intervención humana mínima.
+
+Esta tecnología es especialmente interesante para las empresas, tener una medición de sus sistemas facilita el estudio de balance de beneficio, así como ayuda a detectar fallos o eventos no deseados. 
+
+\subsection{Sensores}
+
+Los sensores son uno de los principales componentes que tienen los sistemas para la captación de datos. Detectan cambios en el entorno, convierten un fenómeno físico en un voltaje analógico medible y los transmiten para su lectura. \cite{pagina:sensores}
+
+Para este proyecto se han utilizado tres tipos de sensores, a continuación, se describirán brevemente:
 
 
-\subsection{Big Data}
+\subsubsection{Sensores de presión de agua}
 
-El Big Data está formado por conjuntos complejos de datos de un elevado tamaño y con una gran velocidad de crecimiento. Estos conjuntos de datos tienen tal volumen que es imposible de almacenarlos, gestionarlos, procesarlos y/o analizarlos con software de procesamientos de datos convencionales.
+Son instrumentos capaces de captar la presión que el agua ejerce sobre el dispositivo y transforma en una señal eléctrica donde la cantidad depende de la presión aplicada sobre este. \cite{pagina:sensor_presion}
+
+
+\subsubsection{Sensores de humedad}
+
+Los sensores de humedad, también conocidos como higrómetros, detectan el contenido de humedad en un área dada, pudiendo ser usados tanto en interiores cómo exteriores, se basan en la detección de agua o vapor en el entorno.
+
+En este proyecto se monitorizan dos sensores de humedad, uno que mide la humedad en el ambiente y otro que lo mide en una parcela de una bodega.
+
+\subsubsection{Sensores de Consumo de bombas}
+
+Las bombas de agua son máquinas hidráulicas que utilizan energía para mover el agua, los sensores se encargan de medir el consumo energético de estas, transforman dicha energía que en señales digitales.  
+
+\section{Big Data}
+
+El Big Data está formado por conjuntos complejos de datos de un elevado tamaño y con una gran velocidad de crecimiento. Estos conjuntos de datos tienen tal volumen que es imposible de almacenarlos, gestionarlos, procesarlos y/o analizarlos con software de procesamiento de datos convencionales.
 
 Pese a su dificultad, estos volúmenes tan masivos son de gran utilidad para abordad problemas de todo tipo que no habrían sido posibles de solucionar antes. \cite{pagina:Oracle_big_data}
 
-\subsection{Anomalías}
+\section{Anomalías}
 
 En Big Data las anomalías son datos que no siguen el patrón natural de la mayoría de los datos, esto puede ser síntoma de algún tipo de fallo o de algún evento no esperado. 
 
-Para detectar estas anomalías o comportamientos atípicos es necesario distinguir en un conjunto de datos cuales son anomalías. Esta puede ser una tarea extremadamente difícil en conjuntos de gran tamaño como se da en Big Data, para ello es necesario la incorporación de modelos de machine learning que identifiquen estas anomalías.
-
-\subsection{Data stream}
-
-Data stream son series de datos ordenados por tiempo que se generan de forma continua y desde diversas fuentes.
+Para detectar estas anomalías o comportamientos atípicos es necesario distinguir en un conjunto de datos cuales son anomalías. Esta puede ser una tarea extremadamente difícil en conjuntos de gran tamaño como se da en Big Data, para ello es necesario la incorporación de modelos de machine learning que identifiquen estas anomalías.\cite{pagina:anomalias}
 
 
-\subsection{Time series}
-Time series o serie temporal es una sucesión de datos ordenados de forma cronológica.
+\section{Time series}
+Time series o serie temporal es una sucesión de datos ordenados de forma cronológica. Estos datos pueden estar separados tanto por intervalos iguales de tiempo o desiguales
 
-A la hora de realizar predicciones el tiempo es normalmente la variable independiente y el objetivo es realizar predicciones a futuro \cite{pagina:toward_data_scince}
+Uno de los usos de time series es el de análisis de predicciones. A la hora de realizar predicciones el tiempo es normalmente la variable independiente y el objetivo es realizar predicciones a futuro \cite{pagina:toward_data_scince}
+
+\section{Data stream}
+
+Los data stream son datos que se generan de forma continua y de diversas fuentes. Estos datos suelen ser utilizados para análisis de datos y son procesados de manera secuencial y gradual.
+
+Los datos que se generan pueden ser de cualquier tipo, en el caso de este proyecto los datos generados so de tipo time series.\cite{pagina:AWS_dataStream}
 
 
-\subsection{Inteligencia artificial}
+\section{Inteligencia artificial}
 
 La inteligencia artificial o IA es la simulación de inteligencia humana por parte de las máquinas, incluyendo el aprendizaje, el razonamiento y la auto corrección.
 
-Dicha disciplina alberga muchos campos cómo pueden ser el aprendizaje automático (Machine learning) o el aprendizaje profundo (Deep Learnng)
+Dicha disciplina alberga muchos campos cómo pueden ser el aprendizaje automático (Machine learning) o el aprendizaje profundo (Deep Learnng).
 
 Actualmente la inteligencia artificial se aplica a cualquier campo, pudiendo realizar tareas que por otros medios serían imposibles.\cite{pagina:techtarget}  
 
@@ -49,7 +75,7 @@ Se puede dividir los algoritmos de machine learning en tres partes:
     \item \textbf{Proceso de decisión}: por lo general los algoritmos de machine learning se utilizan para problemas de predicción o clasificación con la ayuda de datos (los cuales pueden estar etiquetados o no) el algoritmo será capaz de estimar patrones en los datos proporcionados.
     \item \textbf{Función de error}: una función de error que sirva para evaluar las predicciones del modelo y medir la precisión del mismo.
     
-    \item \textbf{Proceso de optimización del modelo}: Si el modelo puede mejorar la precisión con los datos de entrenamiento entonces se ajustan los pesos. El algoritmo repitiera este proceso hasta que se haya llegado al umbral de precisión.
+    \item \textbf{Proceso de optimización del modelo}: si el modelo puede mejorar la precisión con los datos de entrenamiento entonces se ajustan los pesos. El algoritmo repitiera este proceso hasta que se haya llegado al umbral de precisión.
 
 \end{itemize}
 
@@ -59,27 +85,35 @@ Se puede dividir los algoritmos de machine learning en tres partes:
 El aprendizaje supervisado utiliza datos etiquetados, es decir, datos para los que se conoce la respuesta para entrenar el modelo que será capaz de clasificar o predecir cuándo se le presenten datos de los que se desconoce la respuesta. 
 
 
-\subsection{Incremental/online learning}
+\subsubsection{Incremental/online learning}
 
-El aprendizaje incremental son todos aquellos algoritmos escalables que aprenden de forma secuencial y van mejorando el modelo de forma constante con un flujo infinito de datos.
+El aprendizaje incremental son todos aquellos algoritmos escalables que aprenden de forma secuencial y van mejorando el modelo de forma constante con un flujo infinito de datos (data streams).
 
-En el aprendizaje incremental no tenemos acceso a todo el conjunto de datos cuando creamos el modelo, sino que tenemos que crear dicho modelo para que se adapte y aprenda según tenga acceso a los datos. 
+En el aprendizaje incremental no se tiene acceso a todo el conjunto de datos cuando se crea el modelo, sino que se tiene que crear dicho modelo para que se adapte y aprenda según tenga acceso a los datos. 
 
-Esta técnica de machine learning es muy útil cuando se manejan datos a tiempo real donde cada minuto se generan nuevos datos, cómo puede ser el caso de sensores.
+Esta técnica de machine learning es muy útil cuando se manejan datos a tiempo real donde cada minuto se generan nuevos datos, cómo puede ser el caso de sensores.\cite{gepperth:hal-01418129}
 
 
-\subsection{NoSQL}
+\section{NoSQL}
 
 \textit{Not Only SQL}, estas bases de datos, son diseñadas para modelos de datos específicos y cuentan con esquemas flexibles. Están optimizadas para aplicaciones que requieren una gran cantidad de datos, baja latencia y un modelo de datos flexibles.
 
 Existen una gran cantidad de bases de datos NoSQL: clave-valor, Documentos, Gráficos, etc...
 
-\subsubsection{Documentos}
+\subsection{Documentos}
 
-En este tipo de bases de datos, los datos se representan como un objeto o documento de tipo JSON (debido a que para los desarrolladores es un modelo de datos eficiente e intuitivo).\cite{pagina:AWS_NoSQL}
+En este tipo de bases de datos, los datos se representan como un objeto o documento, este puede ser de distintos tipo cómo JSON, XML, YAML o BSON.\cite{pagina:AWS_NoSQL}
 
+Los documentos no requieren que se ajusten a ningún esquema o estructura específica.
 
 \section{Daemons}
 
-En informático, un daemon es un programa que se ejecuta cómo un proceso en segundo plano.
+En informática, un daemon es un programa que se ejecuta cómo un proceso en segundo plano.
 En Linux los daemons son administrados por \textit{systemd} y se administran mediante el comando \textit{systemctl}. Estos leen los archivos con el nombre \textit{nombre.Service} que contiene información sobre cómo se ha de inicializar. Estos archivos se almacenan en \textit{/\{etc,usr/lib,run\}/systemd/system}\cite{pagina:daemons_linux}
+
+
+\section{Curl}
+
+El comando Curl (Cliente URL) proporciona una forma de verificar la conexión a las URL y transferir datos. El comando curl es compatible con diversos protocolos cómo: HTTP, HTTPS, FTP, FTPS, IMAP, POP3, SMB, SCP, TELNET, SMATP entre otros.\cite{pagina:Curl}
+
+

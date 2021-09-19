@@ -9,9 +9,10 @@ En este anexo se recogen los objetivos del proyecto y los requisitos que definen
 Con este proyecto se persigue la realización de los siguientes objetivos:
 
 \begin{itemize}
-    \item Realizar un algoritmo de aprendizaje automático que pueda predecir comportamientos y patrones en los datos de los sensores.
-    \item La implementación de motores de búsqueda para felicitar encontrar los datos deseados con la mayor precisión posible.
+    \item La instalación y configuración de un sistema capaz de recoger, almacenar y gestionar datos de sensores.
+    \item La implementación de un motor de búsqueda para facilitar encontrar los datos deseados con la mayor precisión posible.
     \item Que la monitorización de los datos se muestre lo más clara y accesible posible para el usuario.
+    \item Realizar un algoritmo de aprendizaje automático que pueda predecir comportamientos y patrones en los datos de los sensores.
 \end{itemize}
 
 \newpage
@@ -27,22 +28,29 @@ A continuación, se procederá a enumerar los distintos requisitos funcionales:
     
     \item \textbf{RF-3 Captación de sensores}: El sistema ha de almacenar los datos procedentes de los sensores.
     	
-    \item \textbf{RF-4 Entrenamiento}: El programa ha de entrenar un modelo con los datos de los sensores.
+    \item \textbf{RF-4 Entrenamiento}: El sistema ha de entrenar un modelo con los datos de los sensores.
 
-    \item \textbf{RF-5 Predicción}: El programa ha de realizar una predicción sobre los datos de los sensores.
+    \item \textbf{RF-5 Predicción}: El sistema ha de realizar una predicción sobre los datos de los sensores.
 
     \item \textbf{RF-6 Gestión del sistema}: El usuario ha de ser capaz de gestionar el sistema.
     \begin{itemize}
-	    \item \textbf{RF-6.1 Añadir sensor}: El usuario puede añadir sensores.
-	    \item \textbf{RF-6.2 Borrar sensor}: El usuario puede eliminar sensores.
-	    \item \textbf{RF-6.3 Configurar modelo}: El usuario puede configurar sus propios modelos.
+	    \item \textbf{RF-6.1 Añadir sensor}: El usuario ha de poder añadir sensores.
+	    \item \textbf{RF-6.2 Borrar sensor}: El usuario ha de poder eliminar sensores.
+	    \item \textbf{RF-6.3 Configurar modelo}: El usuario ha de poder configurar sus propios modelos.
 	\end{itemize}
 	
 	\item \textbf{RF-7 Monitorización de datos}: El usuario ha de poder ver los datos de los sensores.
 	\begin{itemize}
 	    \item \textbf{RF-7.1 ver datos reales}: Se ha de monitorizar los datos reales procedentes del sensor.
 	    \item \textbf{RF-7.2 ver datos entrenamiento}: Se ha de monitorizar los datos de entrenamiento del modelo.
-	    \item \textbf{RF-7.2 ver datos predicción}: Se ha de monitorizar los datos de predicción.
+	    \item \textbf{RF-7.3 ver datos predicción}: Se ha de monitorizar los datos de predicción.
+	\end{itemize}
+	\item \textbf{RF-8 Búsquedas filtradas}: El usuario ha de ser capaz de hacer búsquedas y filtrados de los datos.
+	\item \textbf{RF-9 Representación gráfica}: El usuario ha de poder representar de forma gráfica los datos.
+	\begin{itemize}
+	    \item \textbf{RF-9.1 Creación de gráficas}: El usuario ha de poder crear gráficas.
+	    \item \textbf{RF-9.2 Borrado de gráficas}: El usuario ha de poder borrar gráficas.
+	    \item \textbf{RF-9.3 Visualización de gráficas}: El usuario ha de poder visualizar y consultar las gráficas creadas.
 	\end{itemize}
 	
 \end{itemize}	
@@ -54,18 +62,18 @@ A continuación, se procederá a enumerar los distintos requisitos funcionales:
 
 En esta sección se mostrarán los casos de uso y su diagrama.
 
-\subsection{Diagrama de casos de usos}
+\subsection{Diagrama de casos de uso}
 
-\begin{figure}[h]
+\begin{figure}[!h]
 	\centering
-	\includegraphics[width=1.1\textwidth]{img/img_casos_usos.png}
-	\caption{Diagrama de casos de usos}
+	\includegraphics[width=1.2\textwidth]{img/img_casos_usos.png}
+	\caption{Diagrama de casos de uso}
 	\label{img_casos_usos}
 \end{figure}
-\newpage
+\clearpage
 
 \subsection{Actores}
-En esta aplicación interactúan dos actores, los sensores de los que se captan la información y el usuario que gestiona la aplicación y monitoriza los datos de los sensores.
+En esta aplicación interactúan dos actores, los sensores de los que se captan la información y el usuario que gestiona la aplicación y monitoriza el sistema.
 
 \subsection{Casos de uso}
 %Caso de uso 1
@@ -123,7 +131,7 @@ En esta aplicación interactúan dos actores, los sensores de los que se captan 
  {
   Versión                            & \multicolumn{2}{p{10.25cm}}{1.0} \\\hline
   Autor                            & \multicolumn{2}{p{10.25cm}}{Daniel Mellado Hurtado} \\\hline
-  Descripción                            & \multicolumn{2}{p{10.25cm}}{El programa ha de almacenar los datos procedentes de los sensores} \\\hline
+  Descripción                            & \multicolumn{2}{p{10.25cm}}{El sistema ha de almacenar los datos procedentes de los sensores} \\\hline
   \multirow{2}{3.5cm}{Requisitos}   &\multicolumn{2}{p{10.25cm}}{RF-3} \\\cline{2-3}
 
                                          \\\hline
@@ -149,7 +157,7 @@ En esta aplicación interactúan dos actores, los sensores de los que se captan 
  {
   Versión                            & \multicolumn{2}{p{10.25cm}}{1.0} \\\hline
   Autor                            & \multicolumn{2}{p{10.25cm}}{Daniel Mellado Hurtado} \\\hline
-  Descripción                            & \multicolumn{2}{p{10.25cm}}{El programa ha de entrenar un modelo con los datos de los sensores} \\\hline
+  Descripción                            & \multicolumn{2}{p{10.25cm}}{El sistema ha de entrenar un modelo con los datos de los sensores} \\\hline
   \multirow{2}{3.5cm}{Requisitos}   &\multicolumn{2}{p{10.25cm}}{RF-4} \\\cline{2-3}
                                          & \multicolumn{2}{p{10.25cm}}{}
                                          \\\hline
@@ -179,7 +187,7 @@ En esta aplicación interactúan dos actores, los sensores de los que se captan 
  {
   Versión                            & \multicolumn{2}{p{10.25cm}}{1.0} \\\hline
   Autor                            & \multicolumn{2}{p{10.25cm}}{Daniel Mellado Hurtado} \\\hline
-  Descripción                            & \multicolumn{2}{p{10.25cm}}{El programa ha de entrenar un modelo con los datos de los sensores} \\\hline
+  Descripción                            & \multicolumn{2}{p{10.25cm}}{El sistema ha de realizar una predicción sobre los datos de los sensores.} \\\hline
   \multirow{2}{3.5cm}{Requisitos}   &\multicolumn{2}{p{10.25cm}}{RF-5} \\\cline{2-3}
                                          & \multicolumn{2}{p{10.25cm}}{}
                                          \\\hline
@@ -236,7 +244,7 @@ En esta aplicación interactúan dos actores, los sensores de los que se captan 
  {
   Versión                            & \multicolumn{2}{p{10.25cm}}{1.0} \\\hline
   Autor                            & \multicolumn{2}{p{10.25cm}}{Daniel Mellado Hurtado} \\\hline
-  Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario puede añadir sensores.} \\\hline
+  Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario ha de poder añadir sensores.} \\\hline
   \multirow{2}{3.5cm}{Requisitos}   &\multicolumn{2}{p{10.25cm}}{RF-6.1} \\\cline{2-3}
                                          & \multicolumn{2}{p{10.25cm}}{}
                                          \\\hline
@@ -267,7 +275,7 @@ En esta aplicación interactúan dos actores, los sensores de los que se captan 
  {
   Versión                            & \multicolumn{2}{p{10.25cm}}{1.0} \\\hline
   Autor                            & \multicolumn{2}{p{10.25cm}}{Daniel Mellado Hurtado} \\\hline
-  Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario puede eliminar sensores.} \\\hline
+  Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario ha de poder eliminar sensores.} \\\hline
   \multirow{2}{3.5cm}{Requisitos}   &\multicolumn{2}{p{10.25cm}}{RF-6.2} \\\cline{2-3}
                                          & \multicolumn{2}{p{10.25cm}}{}
                                          \\\hline
@@ -298,7 +306,7 @@ En esta aplicación interactúan dos actores, los sensores de los que se captan 
  {
   Versión                            & \multicolumn{2}{p{10.25cm}}{1.0} \\\hline
   Autor                            & \multicolumn{2}{p{10.25cm}}{Daniel Mellado Hurtado} \\\hline
-  Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario puede configurar sus propios modelos.} \\\hline
+  Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario ha de poder configurar sus propios modelos.} \\\hline
   \multirow{2}{3.5cm}{Requisitos}   &\multicolumn{2}{p{10.25cm}}{RF-6.3} \\\cline{2-3}
                                          & \multicolumn{2}{p{10.25cm}}{}
                                          \\\hline
@@ -349,7 +357,7 @@ En esta aplicación interactúan dos actores, los sensores de los que se captan 
         
                                          \\\hline
   Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Se muestran los datos de los sensores} \\\hline
-  Excepciones                        & \multicolumn{2}{p{10.25cm}}{Elasticsearch no está activo, kibana no esta activo.}\\\hline
+  Excepciones                        & \multicolumn{2}{p{10.25cm}}{No existen datos.}\\\hline
   Importancia                            & Alta \\\hline
   Urgencia                               & Alta \\
 }
@@ -378,7 +386,7 @@ En esta aplicación interactúan dos actores, los sensores de los que se captan 
         
                                          \\\hline
   Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Se muestran los valores reales de los sensores} \\\hline
-  Excepciones                        & \multicolumn{2}{p{10.25cm}}{Elasticsearch no está activo, kibana no esta activo.}\\\hline
+  Excepciones                        & \multicolumn{2}{p{10.25cm}}{No existen datos.}\\\hline
   Importancia                            & Alta \\\hline
   Urgencia                               & Alta \\
 }
@@ -407,7 +415,7 @@ En esta aplicación interactúan dos actores, los sensores de los que se captan 
         
                                          \\\hline
   Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Se muestran los valores de entrenamiento de los sensores} \\\hline
-  Excepciones                        & \multicolumn{2}{p{10.25cm}}{Elasticsearch no está activo, kibana no esta activo.}\\\hline
+  Excepciones                        & \multicolumn{2}{p{10.25cm}}{No existen datos.}\\\hline
   Importancia                            & Alta \\\hline
   Urgencia                               & Alta \\
 }
@@ -437,6 +445,158 @@ En esta aplicación interactúan dos actores, los sensores de los que se captan 
                                          \\\hline
   Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Se muestran los valores de predicción de los sensores} \\\hline
   Excepciones                        & \multicolumn{2}{p{10.25cm}}{Elasticsearch no está activo, kibana no esta activo.}\\\hline
+  Importancia                            & Alta \\\hline
+  Urgencia                               & Alta \\
+}
+
+
+%Caso de uso 13
+\tablaSmallSinColores{Caso de uso 13: Búsquedas filtradas.}{p{3cm} p{.75cm} p{9.5cm}}{tablaUC0}{
+  \multicolumn{3}{l}{Caso de uso 13: Búsquedas filtradas.} \\
+ }
+ {
+  Versión                            & \multicolumn{2}{p{10.25cm}}{1.0} \\\hline
+  Autor                            & \multicolumn{2}{p{10.25cm}}{Daniel Mellado Hurtado} \\\hline
+  Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario ha de ser capaz de hacer búsquedas y filtrados de los datos.} \\\hline
+  \multirow{2}{3.5cm}{Requisitos}   &\multicolumn{2}{p{10.25cm}}{RF-8} \\\cline{2-3}
+                                         & \multicolumn{2}{p{10.25cm}}{}
+                                         \\\hline
+                                         
+  Precondiciones                         &  \multicolumn{2}{p{10.25cm}}{Elasticsearch y kibana se encuentran funcionando}   \\\hline
+  \multirow{2}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+                                         & 1    & El usuario accede a la url de kibana.
+  \\\cline{2-3}
+                                         & 2    & El usuario accede al apartado \textit{Discover}.
+  \\\cline{2-3}
+                                         & 3    & El usuario elige un rango de fechas
+  \\\cline{2-3}
+                                         & 4    & El usuario introduce las restricciones que se desea en el buscador y en los filtros.
+        
+                                         \\\hline
+  Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Se muestran los valores filtrados} \\\hline
+  Excepciones                        & \multicolumn{2}{p{10.25cm}}{No existen datos.}\\\hline
+  Importancia                            & Alta \\\hline
+  Urgencia                               & Alta \\
+}
+
+
+
+%Caso de uso 14
+\tablaSmallSinColores{Caso de uso 14: Representación gráfica.}{p{3cm} p{.75cm} p{9.5cm}}{tablaUC0}{
+  \multicolumn{3}{l}{Caso de uso 14: Representación gráficas.} \\
+ }
+ {
+  Versión                            & \multicolumn{2}{p{10.25cm}}{1.0} \\\hline
+  Autor                            & \multicolumn{2}{p{10.25cm}}{Daniel Mellado Hurtado} \\\hline
+  Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario ha de poder representar de forma gráfica los datos.} \\\hline
+  \multirow{2}{3.5cm}{Requisitos}   &\multicolumn{2}{p{10.25cm}}{RF-9} \\\cline{2-3}
+                                         & \multicolumn{2}{p{10.25cm}}{RF-9.1, RF-9.2, RF-9.3}
+                                         \\\hline
+                                         
+  Precondiciones                         &  \multicolumn{2}{p{10.25cm}}{Elasticsearch y kibana se encuentran funcionando}   \\\hline
+  \multirow{2}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+                                         & 1    & El usuario accede a la url de kibana.
+  \\\cline{2-3}
+                                         & 2    & El usuario accede al apartado \textit{Dashboards}.
+
+                                         \\\hline
+  Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{} \\\hline
+  Excepciones                        & \multicolumn{2}{p{10.25cm}}{No existen datos.}\\\hline
+  Importancia                            & Alta \\\hline
+  Urgencia                               & Alta \\
+}
+
+
+%Caso de uso 15
+\tablaSmallSinColores{Caso de uso 15: Creación de gráficas.}{p{3cm} p{.75cm} p{9.5cm}}{tablaUC0}{
+  \multicolumn{3}{l}{Caso de uso 15: Creación de gráficas.} \\
+ }
+ {
+  Versión                            & \multicolumn{2}{p{10.25cm}}{1.0} \\\hline
+  Autor                            & \multicolumn{2}{p{10.25cm}}{Daniel Mellado Hurtado} \\\hline
+  Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario ha de poder crear gráficas.} \\\hline
+  \multirow{2}{3.5cm}{Requisitos}   &\multicolumn{2}{p{10.25cm}}{RF-9.1} \\\cline{2-3}
+                                         & \multicolumn{2}{p{10.25cm}}{}
+                                         \\\hline
+                                         
+  Precondiciones                         &  \multicolumn{2}{p{10.25cm}}{Elasticsearch y kibana se encuentran funcionando}   \\\hline
+  \multirow{2}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+                                         & 1    & El usuario accede a la url de kibana.
+  \\\cline{2-3}
+                                         & 2    & El usuario accede al apartado \textit{Dashboards}.
+  \\\cline{2-3}
+                                         & 3    & El usuario da al botón \textit{Create Dashboard}
+  \\\cline{2-3}
+                                         & 4    & El usuario da al botón \textit{Create Visualization}
+  \\\cline{2-3}
+                                         & 5    & El usuario elige el tipo de gráfico
+  \\\cline{2-3}
+                                         & 6    & El usuario introduce las variables que se van a representar.
+    \\\cline{2-3}
+                                         & 7    & El usuari guarda el grafico, dando al botón \textit{save and return}.
+        
+                                         \\\hline
+  Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Se ha creado un gráfico representando las variables elegidas.} \\\hline
+  Excepciones                        & \multicolumn{2}{p{10.25cm}}{No existen datos.}\\\hline
+  Importancia                            & Alta \\\hline
+  Urgencia                               & Alta \\
+}
+
+%Caso de uso 16
+\tablaSmallSinColores{Caso de uso 16: Borrado de gráficas.}{p{3cm} p{.75cm} p{9.5cm}}{tablaUC0}{
+  \multicolumn{3}{l}{Caso de uso 16: Borrado de gráficas.} \\
+ }
+ {
+  Versión                            & \multicolumn{2}{p{10.25cm}}{1.0} \\\hline
+  Autor                            & \multicolumn{2}{p{10.25cm}}{Daniel Mellado Hurtado} \\\hline
+  Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario ha de poder borrar gráficas.} \\\hline
+  \multirow{2}{3.5cm}{Requisitos}   &\multicolumn{2}{p{10.25cm}}{RF-9.2} \\\cline{2-3}
+                                         & \multicolumn{2}{p{10.25cm}}{}
+                                         \\\hline
+                                         
+  Precondiciones                         &  \multicolumn{2}{p{10.25cm}}{Elasticsearch y kibana se encuentran funcionando}   \\\hline
+  \multirow{2}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+                                         & 1    & El usuario accede a la url de kibana.
+  \\\cline{2-3}
+                                         & 2    & El usuario accede al apartado \textit{Dashboards}.
+  \\\cline{2-3}
+                                         & 3    & El usuario accede al la ruleta de opciones del gráfico que se desea eliminar
+  \\\cline{2-3}
+                                         & 4    & El usuario selecciona la opción \textit{more}
+  \\\cline{2-3}
+                                         & 5    & El usuario selecciona la opción \textit{Delete from Dashboards}
+.
+        
+                                         \\\hline
+  Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{La gráfica se borra} \\\hline
+  Excepciones                        & \multicolumn{2}{p{10.25cm}}{}\\\hline
+  Importancia                            & Alta \\\hline
+  Urgencia                               & Alta \\
+}
+
+%Caso de uso 17
+\tablaSmallSinColores{Caso de uso 16: Visualización de gráficas.}{p{3cm} p{.75cm} p{9.5cm}}{tablaUC0}{
+  \multicolumn{3}{l}{Caso de uso 16:Visualización de gráficas.} \\
+ }
+ {
+  Versión                            & \multicolumn{2}{p{10.25cm}}{1.0} \\\hline
+  Autor                            & \multicolumn{2}{p{10.25cm}}{Daniel Mellado Hurtado} \\\hline
+  Descripción                            & \multicolumn{2}{p{10.25cm}}{El usuario ha de poder visualizar y consultar las gráficas creadas} \\\hline
+  \multirow{2}{3.5cm}{Requisitos}   &\multicolumn{2}{p{10.25cm}}{RF-9.3} \\\cline{2-3}
+                                         & \multicolumn{2}{p{10.25cm}}{}
+                                         \\\hline
+                                         
+  Precondiciones                         &  \multicolumn{2}{p{10.25cm}}{Elasticsearch y kibana se encuentran funcionando}   \\\hline
+  \multirow{2}{3.5cm}{Secuencia normal}  & Paso & Acción \\\cline{2-3}
+                                         & 1    & El usuario accede a la url de kibana.
+  \\\cline{2-3}
+                                         & 2    & El usuario accede al apartado \textit{Dashboards}.
+  \\\cline{2-3}
+                                         & 2    & El usuario elige el rango de fechas para ver los datos representados en las gráficas
+
+                                         \\\hline
+  Postcondiciones                        & \multicolumn{2}{p{10.25cm}}{Se muestran todas las gráficas creadas} \\\hline
+  Excepciones                        & \multicolumn{2}{p{10.25cm}}{}\\\hline
   Importancia                            & Alta \\\hline
   Urgencia                               & Alta \\
 }

@@ -3,17 +3,28 @@
 
 \section{Introducción}
 
-En el siguiente anexo se describe la documentación técnica del programa, se detalla como está estructurado, cómo realizar la correcta instalación y configuración del mismo así como la batería de pruebas realizadas.
+En el siguiente anexo se describe la documentación técnica del programa, se detalla cómo está estructurado, cómo realizar la correcta instalación y configuración del mismo, así como la batería de pruebas realizadas.
 
 \section{Estructura de directorios}
 
-\nombrePrograma se instala en la carpeta \textit{/usr/bin/} dentro un servidor Ubuntu. El programa consta de un script principal que mediante un daemon se ejecuta constantemente en segundo plano. Por cada ciclo de ejecución (por defecto es de un minuto) se descargan los datos en bruto desde PRTG que se almacenan en la carpeta \textit{/usr/bin/Monitorizacion\_IOT/Gestion\_Data/Logs/}. De ahí son procesados y guardados temporalmente en la carpeta
+\nombrePrograma se instala en la carpeta \textit{/usr/bin/} dentro un servidor Ubuntu. El programa consta de un script principal que mediante un daemon se ejecuta constantemente en segundo plano. Por cada ciclo de ejecución (por defecto es de un minuto) se descargan los datos en bruto desde PRTG y se almacenan en la carpeta \textit{/usr/bin/Monitorizacion\_IOT/Gestion\_datos/logs/}. De ahí son procesados y guardados temporalmente en la carpeta
 
-\textit{/usr/bin/Monitorizacion\_IOT/Gestion\_Data/TempData\_sensores/} 
+\textit{/usr/bin/Monitorizacion\_IOT/Gestion\_datos/TempData\_sensores/} 
 
-Al realizar el entrenamiento o la predicción de los sensores se cargan los modelos de dichos sensores, estos se encuentran almacenados en \textit{/usr/bin/Monitorizacion\_IOT/Prediccion/modelos/}
+Tras realizar las comparaciones necesarias y asegurarse que no se van a subir datos repetidos a Elasticsearch se almacenan los datos finales en la carpeta \textit{/usr/bin/Monitorizacion\_IOT/Gestion\_datos/load} desde la cual se suben a la base de datos.
 
-En la carpeta \textit{/usr/bin/Monitorizacion\_IOT/Utilidades/} se encuentran diversas funciones de utilidad. 
+Al realizar el entrenamiento o la predicción de los sensores se cargan los modelos correspondientes a dichos sensores, estos se encuentran almacenados en la carpeta \textit{/usr/bin/Monitorizacion\_IOT/Prediccion/modelos/}. 
+
+Cuando se realiza el entrenamiento de un modelo este devuelve los datos generados y los almacena en
+
+\textit{/usr/bin/Monitorizacion\_IOT/Gestion\_datos/TempData\_entrenamiento/}.
+
+A la hora de predecir también se devuelven los datos generados, los cuales se almacenan en 
+
+\textit{/usr/bin/Monitorizacion\_IOT/Gestion\_datos/TempData\_prediccion/}
+
+por último, en la carpeta
+\textit{/usr/bin/Monitorizacion\_IOT/Utilidades/} se encuentran diversas funciones de utilidad. 
 
 \begin{figure}[h]
 	\dirtree{%
@@ -22,9 +33,11 @@ En la carpeta \textit{/usr/bin/Monitorizacion\_IOT/Utilidades/} se encuentran di
 		.3 bin.
 		.4 Monitorizacion\_IOT.
 		.5 Gestion\_datos.
-		.7 Load.
-		.7 Logs.
+		.7 load.
+		.7 logs.
 		.7 TempData\_sensores.
+		.7 TempData\_entrenamiento.
+		.7 TempData\_prediccion.
 		.5 Prediccion.
 		.7 modelos.
 		.5 Utilidades.
@@ -36,7 +49,7 @@ En la carpeta \textit{/usr/bin/Monitorizacion\_IOT/Utilidades/} se encuentran di
 \newpage
 \section{Manual del programador}
 
-El manual del programador tiene como objetivo ayudar a todas aquellas personas que vayan a trabajar en este proyecto.
+El manual del programador tiene como objetivo ayudar a todas aquellas personas que vayan a trabajar con este proyecto.
 \subsection{Entorno de desarrollo}
 
 Para la realización de este proyecto se necesita tener instalados los siguientes programas y dependencias:
@@ -56,24 +69,27 @@ Librerías python:
     \item numpy: versión 1.21.2
 \end{itemize}
 
-\subsubsection{Archivos}
+\subsection{Archivos}
+A continuación, se mostrarán todos los ficheros que conforman el programa así como una breve descripción:
 
 \begin{itemize}
-    \item \textbf{Monitorizacion\_IOT.sh}: Este es el script principal de la aplicación el cual esta hilado a un daemon, de tal forma que se repite en bucle cada minuto en el cual se descargan los datos de PRTG, se suben a Elasticsearch, se realiza el entrenamiento y la predicción de cada sensor.
+    \item \textbf{Monitorizacion\_IOT.sh}: Este es el script principal de la aplicación el cual está sujeto a un daemon, de tal forma que se repite en bucle cada minuto descargando los datos de PRTG, subiéndolos a Elasticsearch, realizando el entrenamiento y la predicción de cada sensor.
     
-    \item \textbf{/Gestion\_datos/Descargar\_data.sh}: Es el script que se encarga de descargar los datos de PRTG, transformar dichos datos y subirlos a Elasticsearch
+    \item \textbf{/Gestion\_datos/Descargar\_data.sh}: Es el script que se encarga de descargar los datos de PRTG, transformar dichos datos y subirlos a Elasticsearch.
     
     \item \textbf{/Gestion\_datos/Borrar\_datos\_predicciones.sh}: Debido a que para cada sensor se repite la predicción cada minuto y se suben los resultados a Elasticsearch es necesario borrar la predicción anterior para que siempre se pueda visualizar la predicción actualizada, este script hace exactamente eso.
     
-    \item \textbf{/Gestion\_datos/Load\_sensor\_data.sh}: Este script se encarga de enviar línea por línea de un fichero a logstash para poder ser enviado a Elasticsearch
+    \item \textbf{/Gestion\_datos/Load\_sensor\_data.sh}: Este script se encarga de enviar línea por línea de un fichero a logstash para poder ser enviado a Elasticsearch.
+    
+    \item \textbf{/Gestion\_datos/Extractor.py}: En este fichero se encuentra la clase encargada de la descarga de datos de Elasticsearch.
     
     \item \textbf{/Predicciones/Crear\_modelo.py}: En este fichero el usuario puede configurar y crear un modelo para un sensor.
     
     \item \textbf{/Predicciones/Modelo.py}: En este fichero se encuentran las clases que corresponden a todos los modelos.
     
-    \item \textbf{/Predicciones/Persistencia\_modelo.py}: En este fichero se encuentra la clase que permite guardar en disco y cargar cada modelo
+    \item \textbf{/Predicciones/Persistencia\_modelo.py}: En este fichero se encuentra la clase que permite guardar en disco y cargar cada modelo.
     
-    \item \textbf{/Predicciones/Realizar\_entrenamiento.py}: Es el fichero encargado de la realización del entrenamiento del modelo de un sensor, se carga el modelo correspondiente al sensor, se descargan los últimos datos subidos a Elasticsearch y se realiza en entrenamiento del modelo, se suben las predicciones realizadas durante el entrenamiento por el modelo a Elasticsearch y finalmente se guarda el modelo en disco.
+    \item \textbf{/Predicciones/Realizar\_entrenamiento.py}: Es el fichero encargado de la realización del entrenamiento del modelo de un sensor, se carga el modelo correspondiente al sensor, se descargan los últimos datos subidos a Elasticsearch y se realiza en entrenamiento del modelo y finalmente se guarda el modelo en disco.
     
     \item \textbf{/Predicciones/Realizar\_prediccion.py}: Es el fichero encargado de realizar la perdición de un sensor, se carga el modelo correspondiente al sensor que se desea predecir y se realza la perdición a partir de la fecha actual y tantos instantes de tiempo cómo este especificado en el fichero principal, Monitorizacion\_IOT.sh.
     
@@ -85,32 +101,25 @@ Librerías python:
         \item \textbf{ENTRENAMIENTO}:Corresponde al valor del entrenamiento.
     \end{itemize}
     
-    \item \textbf{/Utilidades/Extractor.py}: En este fichero se encuentra la clase encargada de la descarga de datos de Elasticsearch.
-    
     \item \textbf{/Utilidades/Generador\_lineas.py}: En este fichero se encuentra la clase encargada de generar las líneas de texto en un formato específico para poder ser procesadas por logstash. 
     
-    \item \textbf{/Utilidades/Tatamiento\_sensor\_data.py}: En este fichero se encuentra la clase encargada de tratar con los datos de los sensores, permite leer ficheros JSON y transformarlos.
+    \item \textbf{/Utilidades/Tratamiento\_sensor\_data.py}: En este fichero se encuentra la clase encargada de tratar con los datos de los sensores, permite leer ficheros JSON y transformarlos.
     
     \item \textbf{/Utilidades/Transformar\_data.py}: Es el fichero encargado de transformar los ficheros JSON con los datos procedentes de PRTG en un fichero apto para ser procesado por Logstash. 
     
 \end{itemize}
 
-\begin{comment}
-\subsection{Mover ficheros al servidor}
-En este apartado se mostrará una forma en la que se pueden mover ficheros entre un servidor ubuntu y el host.
+\subsection{Modelos}
 
-c:\pscp elk@192.168.0.29:MonitorzacionIOT\_1.0\_all.deb .
+La librería de Python, River, facilita dos tipos de modelos para series temporales permitiendo realizar el entrenamiento de manera incremental con un data stream procedente de los sensores así cómo realizar una predicción de su comportamiento.
 
-c:\pscp "C:\Users\mella\Documents\MonitorzacionIOT\_1.0\_all.deb"
+Pese a que solo estén implementados en la aplicación dos tipos de modelos está preparada para que se pueda implementar nuevos tipos de modelos de diversas librerías.
 
-pi@192.168.0.31:MonitorzacionIOT\_1.0\_all.deb
-\end{comment}
-
-\subsection{Implementar nuevos modelos}
+\subsubsection{Implementar nuevos modelos}
 
 \nombrePrograma es flexible a la implementación de nuevos modelos de incremental learning, para crear un nuevo modelo se ha de acceder a la carpeta donde se ha instalado el programa y editar el fichero \textit{/Predicciones/Modelo.py}, en este fichero se puede ver la clase abstracta \textit{Modelo} la cual implementa cuatro métodos abstractos:
 \begin{itemize}
-    \item \textbf{inicializar(self)}: El método encargado de inicializar  el modelo, implementando el algoritmo deseado.
+    \item \textbf{inicializar(self)}: El método encargado de inicializar el modelo, implementando el algoritmo deseado.
     
     \item \textbf{cargar(self, model)}:  El método encargado de cargar el modelo.
     
@@ -122,18 +131,20 @@ Para crear un nuevo modelo se a de programar una nueva clase que herede de \text
 
 \section{Compilación, instalación y ejecución del proyecto}
 
+En este apartado se mostrará cómo instalar \nombrePrograma. Para facilitar la utilización del programa se adjunta una máquina virtual 
+
 \subsection{Configuración Ubuntu Server}
 
-Para albergar nuestro programa utilizaremos una máquina virtual Ubuntu Server.
+Para albergar el programa se utilizará una máquina virtual Ubuntu Server.
 
-Antes de comenzar la instalación tendremos que asegurarnos que estén instaladas las herramientas de red de Linux, las cuales ayudarán a saber la IP, y con ella poder acceder al servidor de forma remota.
+Antes de comenzar la instalación del programa se tiene que asegurar que estén instaladas las herramientas de red de Linux, las cuales ayudarán a conocer la IP del servidor, y con ella poder acceder al servidor de forma remota.
 
 
 \begin{lstlisting}[frame=single] 
 apt install net-tools
 \end{lstlisting}
 
-También es necesario comprobar la zona horaria del server y si es necesario cambiarla, se puede utilizar el siguiente comando:
+También es necesario comprobar la zona horaria del servidor y si es necesario cambiarla, se puede utilizar el siguiente comando:
 
 
 \begin{lstlisting}[frame=single] 
@@ -142,15 +153,21 @@ dpkg-reconfigure tzdata
 
 \subsection{Instalación \nombrePrograma}
 
-Una vez instalado y configurado Ubuntu server en una máquina virtual podemos proceder a la instalación de \nombrePrograma. Para ello es necesario descargarse del repositorio tanto el script de \textit{install.sh} cómo el paquete debian \textit{MonitorizacionIOT\_1.0\_all.deb}
+Una vez instalado y configurado Ubuntu server en una máquina virtual se puede proceder a la instalación de \nombrePrograma. Para ello es necesario tener descargado del repositorio \url{https://github.com/dmh1001/TFG-Monitorizacion-IOT} tanto el script \textit{install.sh} cómo el paquete debian \textit{MonitorizacionIOT\_1.0\_all.deb}. Importante, a la hora de instalar el programa ambos ficheros se han de encontrar en un mismo directorio. 
 
-Una vez tengamos estos ficheros en nuestra máquina virtual comenzaremos la instalación, para mayor comodidad, asegurarse que accedemos con el usuario root, para ello se puede utilizar el siguiente comando:
+Una vez se tenga estos ficheros en la máquina virtual se podrá comenzar la instalación, para mayor comodidad, asegurarse que se accede con el usuario root, para ello se puede utilizar el siguiente comando:
 
 \begin{lstlisting}[frame=single] 
 sudo su
 \end{lstlisting}
 
-ejecutaremos el script \textit{install.sh} que instalará una serie de paquetes necesarios, cómo son Elasticsearch, logstash, kibana y librerías de python. 
+Para instalar el programa y sus dependencias sólo es necesario ejecutar el script \textit{install.sh} que instalará una serie de paquetes, cómo son Elasticsearch, logstash, kibana, librerías de Python y el propio programa. 
+
+\begin{lstlisting}[frame=single] 
+bash install.sh
+\end{lstlisting}
+
+a continuación, se mostrará el código que realiza el instalador:
 
 \begin{lstlisting}[frame=single] 
 wget -qO - https://artifacts.elastic.co
@@ -159,7 +176,8 @@ wget -qO - https://artifacts.elastic.co
 
 echo "deb https://artifacts.elastic.co/packages/7.x
 
-/apt stable main" | sudo tee -a /etc/apt/sources.list.d
+/apt stable main" 
+| sudo tee -a /etc/apt/sources.list.d
 
 /elastic-7.x.list
 
@@ -182,31 +200,28 @@ pip3 install river
 pip3 install pandas
 pip3 install elasticsearch
 pip3 install numpy
+
+sudo dpkg -i 
+--force-overwrite MonitorizacionIOT_1.0_all.deb
+
 \end{lstlisting}
- 
-Una vez instaladas las dependencias procederemos a instalar el paquete Debian.
- 
-\begin{lstlisting}[frame=single] 
-sudo dpkg -i  MonitorzacionIOT_1.0_all.deb
-\end{lstlisting}
- 
-El paquete se encarga de instalar los archivos del programa, el cual se encuentra en la ruta \textit{/usr/bin/Monitorizacion-IOT/}
 
-El paquete también se encarga de configurar Elasticsearch, kibana y logstash así cómo iniciar los servicios.
+Este proceso se puede demorar unos minutos y es posible que pida la confirmación, por parte del usuario de la instalación de ciertos paquetes.
 
-\subsubsection{Configuración}
- 
-Tras instalarse el paquete se realizan una serie de configuraciones sobre los servicios de Elasticsearch y kibana.
+El instalador se encarga de instalar el paquete Debian que contiene los archivos del programa, el cual se instalará en la ruta \textit{/usr/bin/Monitorizacion-IOT/}. 
 
-\subsubsubsection{\textbf{Elasticsearch}}
- 
-El archivo de configuración se encuentra en la ruta:
+\subsubsection{Configuraciones}
+
+El script también se encarga de configurar Elasticsearch, kibana y logstash así cómo iniciar los servicios.
+Tras instalarse el paquete se realizan una serie de configuraciones sobre los servicios de Elasticsearch y kibana, estás se hacen automáticamente si necesidad de la supervisión del usuario.
+
+\textbf{Elasticsearch}
+
+Se configura el archivo que se encuentra en la ruta:
 
 /etc/elasticsearch/elasticsearch.yml
 
-nota: \textit{Importante, en el archivo de configuración no puede haber ningún espacio al inicio de las líneas.}
- 
-\subsubsubsection{\textbf{kibana}}
+\textbf{kibana}
 
 El archivo de configuración se encuentra en la ruta:
 
@@ -225,7 +240,7 @@ chown -R kibana:kibana /var/log/kibana/
  
  Tras instalar todos los paquetes y ficheros necesarios se inicializan los procesos:
  
- \subsubsubsection{\textbf{Elasticsearch}}
+ \textbf{Elasticsearch}
  
  \begin{lstlisting}[frame=single]  
   systemctl daemon-reload && 
@@ -234,158 +249,27 @@ chown -R kibana:kibana /var/log/kibana/
 \end{lstlisting}
  
  
- \subsubsubsection{\textbf{kibana}}
+ \textbf{kibana}
  
  \begin{lstlisting}[frame=single]  
 systemctl daemon-reload && systemctl enable kibana
 systemctl start kibana
 \end{lstlisting}
  
- \subsubsubsection{\textbf{logstash}}
+\textbf{logstash}
  
- \begin{lstlisting}[frame=single] 
+\begin{lstlisting}[frame=single] 
 systemctl daemon-reload && systemctl enable logstash
 systemctl start logstash
 
 \end{lstlisting}
  
- \subsection{Configurar Monitorizacion\_IOT}
+ Este es el último paso que realiza el instalador, a partir de aquí el resto de la configuración corre a cargo del usuario.
  
- Una vez se haya instalado el paquete Debian hay una serie de cambios que hay que realizar manualmente antes de poder ser ejecutado.
- 
- El primero sería en el fichero del logstash:
- 
- /etc/logstash/conf.d/logstashSensor.conf
- 
- En el se encuentra el mecanismo que permite a logstash procesar los archivos de logs con los datos de nuestros sensores y enviárselos a la BBDD de Elasticsearch.
- 
- \begin{verbatim}
-input{
-        http{
-                id=> "sensor_data_http_input"
-        }
-}
 
-filter{
+\subsection{Comprobación de procesos}
 
-        ruby {
-                code => '
-                    event.get("reading").each { |k, v|
-                        event.set(k,v)
-                    }
-                    event.remove("reading")
-                '
-            }
-
-}
-output{
-
-        elasticsearch{
-                hosts => ["localhost:9200", "IP_Ubuntu_server:9200"]
-                index => "sensor_data-%{+YYYY.MM.dd}"
-        }
-}
- \end{verbatim}
- 
-Para que que logstash mande la información a nuestro Elasticsearch tendremos que sustituir donde pone ``IP\_Ubuntu\_server'' por la IP de nuestro server, en el cual se ha instalado Elasticsearch.
-
-\subsubsubsection{\textbf{Index pattern}}
-
-A continuación accederemos a Kibana, para ello introduciremos en un navegador web de nuestro host la url: IP\_Ubuntu\_server:5601
-
-accederemos a Dev Tools y configuraremos el índice que utilizará logstash para poder subir y clasificar los datos.
-
-
-\begin{listing}
-\begin{minted}[frame=single,
-               framesep=3mm,
-               linenos=true,
-               xleftmargin=21pt,
-               tabsize=6]{js}
-
-POST _template/sensor_data_template
-{
-  "index_patterns": [
-    "sensor_data*"
-  ],
-  "settings": {
-    "number_of_replicas": "1",
-    "number_of_shards": "5"
-  },
-  "mappings": {
-    "properties": {
-      "sensorId": {
-        "type": "integer"
-      },
-      "datetime":{
-        "type": "date",
-        "format": "dd/MM/yyyy HH:mm:ss"
-      },
-      "reading": {
-        "type": "nested", 
-        "properties": { 
-          "name": {"type":"keyword"},
-          "description": {"type":"double"}
-        }
-      }
-    }
-  }
-}
-
-
-\end{minted}
-\caption{Índice} 
-\label{json-transformado-example}
-\end{listing}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1.1\textwidth]{img/img_crear_patron.png}
-	\caption{Crear un índice}
-	\label{img_index_pattern}
-\end{figure}
-\newpage
-
-Una vez creado el índice todos los datos procedentes de losgstash se almacenarán con ese índice permitiendo, dentro del menú Stack Management en el apartado index Managment consultar los datos que va recibiendo.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1.1\textwidth]{img/img_index_manager.png}
-	\caption{Index Managment}
-	\label{img_index_manager.png}
-\end{figure}
-
-Para finalizar y poder explorar y visualizar los datos en Kibana es necesarios que exista un ``index pattern'' que diga a Elasticsearch que índices contienen los datos así como especificar de que tipo son, en este caso se ha de crear uno para que albergue todo los datos procedentes de sensores ``sensor\_data-*''\cite{pagina:elastic}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1.1\textwidth]{img/img_create_index_pattern.png}
-	\caption{Creación de un index pattern}
-	\label{img_create_index_pattern.png}
-\end{figure}
-
-Una vez creado el patrón nos pedirá que lo configuremos a nuestro gusto, podremos especificar cuál va a ser el índice de nuestros datos, si el tiempo en el que es indexado a en Elasticsearch ``@timestamp'' u otro campo fecha que nosotros prefiramos.
-
-También se puede cambiar el tipo de cualquier otro campo.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1.1\textwidth]{img/img_conf_index_pattern.png}
-	\caption{Configuración de un index pattern}
-	\label{img_conf_index_pattern.png}
-\end{figure}
-\newpage
-
-
-
-\subsection{Inicializar \nombrePrograma}
-
-Una vez instalado y configurado ya podremos iniciar nuestro programa introduciendo el siguiente comando como usuario administrador.
-\begin{lstlisting}[frame=single]  
-systemctl start Monitorizacion_IOT
-\end{lstlisting}
-
-También puede ser de utilidad comprobar tanto el estado de nuestro programa como el de Elasticsearch, kibana o logstash en caso de que se haya producido algún fallo.
+Es importante comprobar que los procesos funciones con normalidad y que estos estén activos 
 
 \begin{lstlisting}[frame=single]  
 systemctl status Monitorizacion_IOT
@@ -437,7 +321,7 @@ Para estas pruebas se usarán dos de los sensores, el que mide la presión de la
 
 Las métricas de regresión dan un promedio de cuanto de acertadas están las predicciones obtenidas sobre el valor real. Para ello se utilizarán las siguientes métricas:
 
-\subsubsubsection{\textbf{MSE}}
+\textbf{MSE}
 
 Mean Squared Error o MSE es una de las métricas más comunes en la evaluación de regresión. Mide el error cuadrado promedio de las predicciones.
 
@@ -449,7 +333,7 @@ Se calcula como el promedio de las diferencias al cuadrado entre los valores rea
 
 Al elevarse al cuadrado tiende a inflar errores grandes, por lo que cuanto mayor sea la diferencia entre la predicción y los valores reales mayor será el error.
 
-\subsubsubsection{\textbf{RMSE}}
+\textbf{RMSE}
 
 Root Mean Squared Error o RMSE es una extensión de MSE. Esta métrica calcula la raíz cuadrada de MSE, haciendo que las unidades de las métricas sean las mismas que las unidades de los valores originales.
 
@@ -459,7 +343,7 @@ Root Mean Squared Error o RMSE es una extensión de MSE. Esta métrica calcula l
 
 Al elevar el MSE al cuadrado se deja de penalizar los errores grandes,
 
-\subsubsubsection{\textbf{MAE}}
+\textbf{MAE}
 
 Mean Absolute Error o MAE al igual que RMSE las unidades de error coinciden con las unidades de los valores reales y predichos.
 
@@ -471,7 +355,7 @@ Se calcula como el promedio del valor absoluto de la diferencia entre los valore
     MAE = \frac{1}{N} \cdot \sum_{i=1}^{N}|y_i - \hat{y}_i| 
 \end{equation*}
 
-\subsubsubsection{\textbf{R2}}
+\textbf{R2}
 
 R2 es una métrica que calcula la bondad del modelo.
 
@@ -483,6 +367,7 @@ El mejor valor posible es 1, indicando una predicción perfecta y puede tomar va
 
 Para los siguientes test se utilizará el modelo SNARIMAX. Se realizan las pruebas con datos 
 recopilados de siete días distintos, 
+
 \subsubsection{Pruebas Sensor Consumo Bomba Agua}
 
 \begin{figure}[h]
@@ -525,21 +410,21 @@ recopilados de siete días distintos,
 	\centering
 	\includegraphics[width=1.1\textwidth]{img/img_2051_2.png}
 	\caption{Presión tubería de agua en las fechas: 28/08/2021 - 29/08/2021}
-	\label{img_prediccion_sensor2051}
+	\label{img_2051_2}
 \end{figure}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=1.1\textwidth]{img/img_2051_6.png}
 	\caption{Presión tubería de agua en las fechas: 25/07/2021 - 26/07/2021}
-	\label{img_prediccion_sensor2051}
+	\label{img_2051_6}
 \end{figure}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=1.1\textwidth]{img/img_2051_7.png}
 	\caption{Presión tubería de agua en las fechas: 31/07/2021 - 01/08/2021}
-	\label{img_prediccion_sensor2051}
+	\label{img_2051_7}
 \end{figure}
 \newpage
 
@@ -554,28 +439,41 @@ recopilados de siete días distintos,
 25/07/2021 - 26/07/2021 & 0.461 & 0.679 & 0.453 & -4.156\\\hline
 \textbf{Media}          & \textbf{0.222} & \textbf{0.424} & \textbf{0.318} & \textbf{-1.362}\\
 } 
-\begin{comment}
 
+\clearpage
+\subsubsection{Pruebas con conjuntos de datos más grandes}
+Para probar cómo funcionaría el modelo con un conjunto de datos más amplio, de cinco meses.
+Se ha descargado de la página web kaggle un dataset que recoge datos procedentes de varios sensores de una bomba de agua. \url{https://www.kaggle.com/nphantawee/pump-sensor-data} 
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=1.1\textwidth]{img/img_pred_2051.png}
-	\caption{predicción con modelo SNARIMAX sensor de Presión tubería de agua}
-	\label{img_prediccion_sensor2051}
+	\includegraphics[width=1.1\textwidth]{img/img_dataset1.png}
+	\caption{dataset 1}
+	\label{img_dataset1}
 \end{figure}
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=1.1\textwidth]{img/img_predDETRENDER_2051.png}
-	\caption{predicción con modelo Detrender sensor de Presión tubería de agua}
-	\label{img_prediccion_sensor2051}
+	\includegraphics[width=1.1\textwidth]{img/img_dataset_3.png}
+	\caption{dataset 3}
+	\label{img_dataset1}
 \end{figure}
 
-\tablaSmall{métricas Presión tuberñia de agua 1}{l c c c c}{métricas}
-{ \multicolumn{1}{l}{Modelos} & MSE & RMSE & MAE & R2 \\}{ 
-SNARIMAX & 0.193 & 0.439 & 0.358 & -1.658\\
-Detrender & 0.05 & 0.224 & 0.197 & 0.305\\
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1.1\textwidth]{img/img_dataset_4png}
+	\caption{dataset 4}
+	\label{img_dataset1}
+\end{figure}
 
+\tablaSmall{métricas dataset}{l c c c c}{métricas}
+{ \multicolumn{1}{l}{} & MSE & RMSE & MAE & R2 \\}{ 
+
+dataset1 & 2.883 & 1.698 & 1.213 & -0.055\\
+dataset2 & 1.719 & 1.311 & 1.005 & -0.115\\
+dataset3 & 1.613 & 1.270 & 0.982 & -0.287\\
+dataset4 & 130.277 & 11.414 & 7.697 & -0.428\\\hline
+\textbf{Media}          & \textbf{34.123} & \textbf{3.923} & \textbf{2.724} & \textbf{-0.221}\\
 } 
 
-\end{comment}
+Cómo se puede observar, las pruebas no han sido satisfactorias, al entrenar un dataset con un conjunto de datos más amplio los resultados obtenidos no muestran que se haya aplicado un aprendizaje en el momento en el que el modelo deja de entrenar para únicamente predecir.
